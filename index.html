@@ -14,7 +14,7 @@
 <body>
     
 <div class="container text-center justify-content-center"> 
-    <!-- Start Screen -->
+        <!-- Start Screen -->
     <div id="start-screen" class="container text-center mt-5">
         <div class="toast align-items-center text-bg-primary border-0 position-relative top-10 start-50 translate-middle w-75" 
             role="alert" aria-live="assertive" aria-atomic="true" id="toast-example">
@@ -27,12 +27,56 @@
         </div>
         <h1>Grile Barou</h1>
         <p class="mt-3">Testează-ți cunoștințele. Selectează numărul de întrebări și apasă pentru a începe.</p>
-        
+       
         <div class="row justify-content-center mt-3">
             <div class="col-lg-2 col-md-3 col-sm-4 col-6 d-flex justify-content-center">
                 <input type="number" id="question-count" class="form-control" min="1" max="100" value="10">
             </div>
         </div>
+        <!-- Filter Section -->
+        <div id="materie-filter" class="container-fluid mt-3 mb-4">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-12 col-md-4"> <!-- Center the content on large and small screens -->
+                    <div class="container-fluid d-flex flex-column align-items-start">
+                        <label class="filtrutitlu">Filtrează după Materie:</label><br>
+                        <!-- "Toate" Switch -->
+                        <div class="form-check form-switch">
+                            <input class="form-check-input materie-option" type="checkbox" id="all" value="all" checked>
+                            <label class="form-check-label" for="all">Toate</label>
+                        </div>
+                        <!-- Materie1 Switch -->
+                        <div class="form-check form-switch">
+                            <input class="form-check-input materie-option" type="checkbox" id="Materie1" value="OEPA">
+                            <label class="form-check-label" for="Materie1">OEPA</label>
+                        </div>
+                        <!-- Materie2 Switch -->
+                        <div class="form-check form-switch">
+                            <input class="form-check-input materie-option" type="checkbox" id="Materie2" value="Drept civil">
+                            <label class="form-check-label" for="Materie2">Drept civil</label>
+                        </div>
+                        <!-- Materie3 Switch -->
+                        <div class="form-check form-switch">
+                            <input class="form-check-input materie-option" type="checkbox" id="Materie3" value="Drept procesual civil">
+                            <label class="form-check-label" for="Materie3">Drept procesual civil</label>
+                        </div>
+                        <!-- Materie4 Switch -->
+                        <div class="form-check form-switch">
+                            <input class="form-check-input materie-option" type="checkbox" id="Materie4" value="Drept penal">
+                            <label class="form-check-label" for="Materie4">Drept penal</label>
+                        </div>
+                        <!-- Materie5 Switch -->
+                        <div class="form-check form-switch">
+                            <input class="form-check-input materie-option" type="checkbox" id="Materie5" value="Drept procesual penal">
+                            <label class="form-check-label" for="Materie5">Drept procesual penal</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        
+   
         <button class="btn btn-primary mt-3" onclick="startQuiz()">Începe testul</button>
         <div class="row m-3 justify-content-center">
             <!-- Correct Image Syntax -->
@@ -42,6 +86,7 @@
             <p class="mt-3">Grilele sunt preluate din subiectele examenului de primire în profesia de avocat (pentru dobândirea titlului profesional de avocat <b>stagiar</b>) din anii precedenți.</p>
         </div>
     </div>
+
 
 
     <!-- Quiz Screen -->

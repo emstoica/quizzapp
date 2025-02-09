@@ -11,20 +11,48 @@ async function loadQuestions() {
     questions = await response.json();
 }
 
-// Start Quiz
+// New function: Filter questions based on selected Materie
+function filterQuestions(allQuestions) {
+    const checkboxes = document.querySelectorAll('.materie-option');
+    // If "all" is checked, return all questions
+    for (let cb of checkboxes) {
+        if (cb.value === "all" && cb.checked) {
+            return allQuestions;
+        }
+    }
+    // Otherwise, collect selected subjects
+    let selectedSubjects = [];
+    checkboxes.forEach(cb => {
+        if (cb.value !== "all" && cb.checked) {
+            selectedSubjects.push(cb.value);
+        }
+    });
+    // Filter questions where the "Materie" field matches one of the selected subjects
+    return allQuestions.filter(q => selectedSubjects.includes(q.Materie));
+}
+
+// Update the Start Quiz function to filter questions
 async function startQuiz() {
     await loadQuestions();
+
+    // Filter questions using the filter options from the start screen
+    let filteredQuestions = filterQuestions(questions);
+    if (filteredQuestions.length === 0) {
+        alert("Nu există întrebări pentru materiile selectate!");
+        return;
+    }
     
     let numQuestions = parseInt(document.getElementById("question-count").value);
-    numQuestions = Math.min(numQuestions, questions.length);
+    numQuestions = Math.min(numQuestions, filteredQuestions.length);
 
-    questionPool = questions.sort(() => Math.random() - 0.5).slice(0, numQuestions);
+    questionPool = filteredQuestions.sort(() => Math.random() - 0.5).slice(0, numQuestions);
 
     document.getElementById("start-screen").style.display = "none";
     document.getElementById("quiz-screen").style.display = "block";
 
     loadQuestion();
 }
+
 
 // Load Question
 function loadQuestion() {
