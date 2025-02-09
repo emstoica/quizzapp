@@ -81,7 +81,7 @@ function toggleSelection(button) {
     document.getElementById("submit-button").disabled = selectedAnswers.length === 0;
 }
 
-// Check Answer
+// Check Answer Function
 function checkAnswer() {
     let question = questionPool[currentQuestionIndex];
     let correctAnswers = question.correct.map(String);
@@ -106,6 +106,7 @@ function checkAnswer() {
         }
     });
 
+    // Track correct/incorrect answers
     if (!isCorrect) {
         wrongQuestions.push({
             question: question.question,
@@ -117,25 +118,34 @@ function checkAnswer() {
         correctCount++;
     }
 
-    // Hide "Check Answer" button and show "Next Question" button
+    // Hide "Submit Answer" button and show either "Next Question" or "See Results" button
     document.getElementById("submit-button").style.display = "none";
-    document.getElementById("next-button").style.display = "block";
+
+    if (currentQuestionIndex === questionPool.length - 1) {
+        // Show "See Results" button on the last question
+        document.getElementById("next-button").style.display = "none";
+        document.getElementById("check-results-button").style.display = "block";
+    } else {
+        // Show "Next Question" button for all other questions
+        document.getElementById("next-button").style.display = "block";
+        document.getElementById("check-results-button").style.display = "none";
+    }
 }
 
 // Next Question Function
 function nextQuestion() {
-    if (currentQuestionIndex < questionPool.length - 1) {
-        currentQuestionIndex++;
+    currentQuestionIndex++;
+
+    if (currentQuestionIndex < questionPool.length) {
         loadQuestion();
     } else {
         showSummary();
     }
 
-    // Hide "Next Question" button and show "Check Answer" button for next question
+    // Hide "Next Question" button and show "Submit Answer" button for next question
     document.getElementById("next-button").style.display = "none";
     document.getElementById("submit-button").style.display = "block";
 }
-
 
 // Show Quiz Summary
 function showSummary() {
@@ -147,20 +157,20 @@ function showSummary() {
 
     if (wrongQuestions.length > 0) {
         summaryContainer.innerHTML += `<h4>Grile greșite:</h4>`;
-        
+
         wrongQuestions.forEach((entry, index) => {
             summaryContainer.innerHTML += `<div class="summary-item">
                 <p><strong>${index + 1}. ${entry.question}</strong></p>
                 <ul>`;
-            
+
             Object.keys(entry.options).forEach(optionKey => {
                 let optionText = entry.options[optionKey];
                 let isCorrect = entry.correct.includes(optionText);
                 let isSelected = entry.selected.includes(optionText);
-                
+
                 summaryContainer.innerHTML += `
                     <li class="${isCorrect ? 'correct-border' : ''} ${isSelected && !isCorrect ? 'incorrect' : ''}">
-                        ${optionText} ${isSelected ? '(✔️ Selectat)' : ''}
+                        ${optionText} ${isSelected ? '<strong>(✔️ Selectat)</strong>' : ''}
                     </li>`;
             });
 
@@ -168,8 +178,10 @@ function showSummary() {
         });
     } else {
         summaryContainer.innerHTML += `<p>Felicitări! Ai răspuns corect la toate întrebările!</p>`;
+        summaryContainer.innerHTML += `<img src="assets/catcongrats.gif" alt="Congratulations GIF" class="img-fluid mt-4 gifpisica">`;
     }
 }
+
 
 // Restart Quiz
 function restartQuiz() {

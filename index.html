@@ -38,7 +38,6 @@
 
     <!-- Quiz Screen -->
     <div id="quiz-screen" class="container text-center mt-5" style="display: none;">
-    
         <p id="question-counter" class="fs-4 mb-4"></p>
 
         <h2 id="question-text" class="mb-4"></h2>
@@ -46,8 +45,10 @@
         <div id="button-container" class="d-flex justify-content-center mt-3">
             <button id="submit-button" class="btn btn-success" onclick="checkAnswer()" disabled>Verifică răspuns</button>
             <button id="next-button" class="btn btn-secondary mt-3" onclick="nextQuestion()" style="display: none;">Următoarea întrebare</button>
+            <button id="check-results-button" class="btn btn-primary mt-3" onclick="showSummary()" style="display: none;">Vezi Rezultatele</button>
         </div>        
     </div>
+
     
     <!-- Summary Screen -->
     <div id="quiz-summary" class="container text-center mt-5" style="display: none;">
