@@ -107,17 +107,18 @@ function checkAnswer() {
     });
 
     if (!isCorrect) {
-        wrongQuestions.push({ 
+        wrongQuestions.push({
             question: question.question,
             options: question.answers,
-            selected: selectedAnswers.map(ans => question.answers[ans]), 
+            selected: selectedAnswers.map(ans => question.answers[ans]),
             correct: correctAnswers.map(ans => question.answers[ans])
         });
     } else {
         correctCount++;
     }
 
-    document.getElementById("submit-button").disabled = true;
+    // Hide "Check Answer" button and show "Next Question" button
+    document.getElementById("submit-button").style.display = "none";
     document.getElementById("next-button").style.display = "block";
 }
 
@@ -129,7 +130,12 @@ function nextQuestion() {
     } else {
         showSummary();
     }
+
+    // Hide "Next Question" button and show "Check Answer" button for next question
+    document.getElementById("next-button").style.display = "none";
+    document.getElementById("submit-button").style.display = "block";
 }
+
 
 // Show Quiz Summary
 function showSummary() {
