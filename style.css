@@ -18,6 +18,10 @@ h3{
     font-size: 2.5em;
     font-weight: 600;
 }
+li{
+    background-color: #cfcfcf3f;
+    border-radius: 4px;
+}
 
 button {
     margin-top: 10px;
@@ -54,7 +58,7 @@ button {
 
 /* Adds a red background to incorrect selections */
 .incorrect {
-    background-color: #ffcccc !important;
+    border: 3px solid rgb(128, 0, 0) !important;
     border-radius: 4px;
 
 }
@@ -111,10 +115,3 @@ hr{
     top: 15vw;
 }
 
-#restart-button {
-    margin-top: 15px; /* Ensures a space between the buttons */
-}
-
-#restart-button:hover {
-    background-color: #d9534f; /* Custom hover effect */
-}
