@@ -100,3 +100,6 @@ hr{
     max-width: 200px;
     height: auto;
 }
+.bold-text{
+    font-weight: 900;
+}
