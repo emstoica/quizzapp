@@ -195,6 +195,7 @@ function restartQuiz() {
 // Show Toast Notification
 window.onload = function() {
     let toastElement = document.getElementById("toast-example");
-    let toast = new bootstrap.Toast(toastElement);
+    let toast = new bootstrap.Toast(toastElement, { autohide: false });
     toast.show();
 };
+
