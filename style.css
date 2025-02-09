@@ -70,6 +70,10 @@ button:disabled {
 }
 
 /* Edits */
+#question-counter{
+    text-shadow: 2px 2px 4px #a77f95;
+}
+
 #quiz-summary ul {
     list-style-type: none;
     padding-left: 0;
@@ -102,4 +106,15 @@ hr{
 }
 .bold-text{
     font-weight: 900;
+}
+.disclaimer{
+    top: 15vw;
+}
+
+#restart-button {
+    margin-top: 15px; /* Ensures a space between the buttons */
+}
+
+#restart-button:hover {
+    background-color: #d9534f; /* Custom hover effect */
 }
