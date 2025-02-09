@@ -18,9 +18,28 @@ button {
     cursor: pointer;
 }
 
-.selected { background-color: lightblue; }
-.correct { background-color: lightgreen; }
-.incorrect { background-color: lightcoral; }
+.answer-button {
+    background-color: white;
+    border: 1px solid #ccc;
+    transition: background 0.3s ease;
+}
+
+.selected {
+    background-color: lightblue; /* Initially selected */
+}
+
+.selected-emphasized {
+    border: rgb(99, 176, 224) 10px solid; /* Selected after user has answered */
+    border-radius: 8px;
+}
+
+.correct {
+    background-color: lightgreen; /* Correct answers */
+}
+
+.incorrect {
+    background-color: lightcoral; /* Incorrect answers */
+}
 
 #summary-screen ul {
     text-align: left;

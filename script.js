@@ -16,7 +16,7 @@ async function startQuiz() {
     await loadQuestions();
     
     let numQuestions = parseInt(document.getElementById("question-count").value);
-    numQuestions = Math.min(numQuestions, questions.length);  // Ensure within range
+    numQuestions = Math.min(numQuestions, questions.length);
 
     questionPool = questions.sort(() => Math.random() - 0.5).slice(0, numQuestions);
 
@@ -41,14 +41,23 @@ function loadQuestion() {
             let button = document.createElement("button");
             button.innerText = answerText;
             button.dataset.choice = number;
+            button.classList.add("answer-button");
             button.onclick = () => toggleSelection(button);
             answersContainer.appendChild(button);
         }
     });
+
+    // Reset buttons state
+    document.getElementById("submit-button").disabled = true;
+    document.getElementById("next-button").style.display = "none";
 }
 
 // Toggle answer selection (max 2 answers)
 function toggleSelection(button) {
+    if (document.getElementById("submit-button").disabled === true) {
+        return; // Prevent selection after submitting
+    }
+
     let choice = button.dataset.choice;
 
     if (selectedAnswers.includes(choice)) {
@@ -60,25 +69,35 @@ function toggleSelection(button) {
             button.classList.add("selected");
         }
     }
+
+    // Enable the submit button only if at least one answer is selected
+    document.getElementById("submit-button").disabled = selectedAnswers.length === 0;
 }
 
 // Check the answer
 function checkAnswer() {
     let question = questionPool[currentQuestionIndex];
-    let correctAnswers = question.correct.sort();  // Sort for comparison
+    let correctAnswers = question.correct.sort();
     let selectedSorted = selectedAnswers.sort();
 
     let answerButtons = document.querySelectorAll("#answers-container button");
-
     let isCorrect = JSON.stringify(selectedSorted) === JSON.stringify(correctAnswers);
 
     answerButtons.forEach(btn => {
+        btn.onclick = null; // Disable answer selection after submission
+
+        if (selectedAnswers.includes(btn.dataset.choice)) {
+            btn.classList.add("selected-emphasized");
+        }
         if (correctAnswers.includes(btn.dataset.choice)) {
             btn.classList.add("correct");
         } else {
             btn.classList.add("incorrect");
         }
     });
+
+    // Disable "Submit Answer" after submission
+    document.getElementById("submit-button").disabled = true;
 
     if (isCorrect) {
         correctCount++;
@@ -92,15 +111,18 @@ function checkAnswer() {
         });
     }
 
-    // Move to next question
-    setTimeout(() => {
-        currentQuestionIndex++;
-        if (currentQuestionIndex < questionPool.length) {
-            loadQuestion();
-        } else {
-            showSummary();
-        }
-    }, 2000);
+    // Show "Next Question" button
+    document.getElementById("next-button").style.display = "block";
+}
+
+// Go to the next question
+function nextQuestion() {
+    currentQuestionIndex++;
+    if (currentQuestionIndex < questionPool.length) {
+        loadQuestion();
+    } else {
+        showSummary();
+    }
 }
 
 // Show summary at the end
