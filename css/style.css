@@ -1,0 +1,120 @@
+body {
+    font-family: "Zilla Slab", serif;
+    text-align: center;
+    padding: 20px;
+    background-color: #fff9dd;
+}
+
+h1 {
+    font-weight: 700;
+}
+h2 {
+    font-weight: 500;
+}
+h3{
+    font-weight: 600;
+}
+.result-title {
+    font-size: 2.5em;
+    font-weight: 600;
+}
+li{
+    background-color: #cfcfcf3f;
+    border-radius: 4px;
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Default answer button */
+.answer-button {
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: background 0.3s ease, border 0.3s ease;
+}
+
+/* Selected answer */
+.selected {
+    background-color: lightblue;
+    font-weight: bold;
+}
+
+/* Adds a green border to correct answers */
+.correct-border {
+    border: 3px solid green !important;
+    border-radius: 4px;
+}
+
+/* Makes selected answers bold */
+.bold-text {
+    font-weight: bold;
+}
+
+/* Adds a red background to incorrect selections */
+.incorrect {
+    border: 3px solid rgb(128, 0, 0) !important;
+    border-radius: 4px;
+
+}
+
+
+/* Disabled state */
+button:disabled {
+    background-color: #e0e0e0;
+    cursor: not-allowed;
+}
+.list-group-item {
+    text-align: left;
+}
+
+/* Edits */
+#question-counter{
+    text-shadow: 2px 2px 4px #a77f95;
+}
+
+#quiz-summary ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+#summary-container {
+    margin-top: 2em;
+    
+}
+
+#quiz-summary li {
+    list-style-type: none; /* Remove the marker */
+    margin: 0.5em;
+}
+.summary-item {
+    text-align: left; /* Align text to the left */
+    margin-left: 20px; /* Optional: Adds space on the left if needed */
+}
+
+hr{
+    border: 2px solid #000000;
+    border-radius: 2px;
+}
+.gifpisica{
+    border-radius: 4px;
+}
+.lawimage{
+    max-width: 200px;
+    height: auto;
+}
+.bold-text{
+    font-weight: 900;
+}
+.disclaimer{
+    top: 10vw;
+}
+.filtrutitlu{
+    font-weight: 600;
+}
+
