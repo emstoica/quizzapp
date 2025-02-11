@@ -8,7 +8,7 @@ let correctQuestions = [];
 
 // Load questions
 async function loadQuestions() {
-    const response = await fetch('questions.json');
+    const response = await fetch('cleaned-questions.json');
     questions = await response.json();
 }
 
@@ -228,78 +228,52 @@ function showSummary() {
     document.getElementById("quiz-screen").style.display = "none";
     document.getElementById("quiz-summary").style.display = "block";
 
-    let summaryContainer = document.getElementById("summary-container");
-    summaryContainer.innerHTML = `<h3>Scor final: ${correctCount} / ${questionPool.length}</h3>`;
+    let summaryContainer1 = document.getElementById("summary-container");
+    let summaryContainer2 = document.getElementById("summary-container2");
 
-    if (wrongQuestions.length > 0) {
-        summaryContainer.innerHTML += `<h4>Grile: </h4>`;
+    // Display final score
+    summaryContainer1.innerHTML = `<h3>Scor final: ${correctCount} / ${questionPool.length}</h3>`;
 
-        wrongQuestions.forEach((entry, index) => {
-            summaryContainer.innerHTML += `</ul></div><hr>`;
-
-            summaryContainer.innerHTML += `<div class="summary-item">
-                <p><strong>${index + 1}. ${entry.question}</strong></p>
-                <ul>`;
-
-            Object.keys(entry.options).forEach(optionKey => {
-                let optionText = entry.options[optionKey];
-                let isCorrect = entry.correct.includes(optionText);
-                let isSelected = entry.selected.includes(optionText);
-
-                summaryContainer.innerHTML += `
-                    <li class="${isCorrect ? 'correct-border' : ''} ${isSelected && !isCorrect ? 'incorrect' : ''}">
-                        ${optionText} ${isSelected ? '<strong>(✔️ Selectat)</strong>' : ''}
-                    </li>`;
-            });
-
-        });
-
-        correctQuestions.forEach((entry, index) => {
-            summaryContainer.innerHTML += `</ul></div><hr>`;
-
-            summaryContainer.innerHTML += `<div class="summary-item">
-                <p><strong>${index + 1}. ${entry.question}</strong></p>
-                <ul>`;
-
-            Object.keys(entry.options).forEach(optionKey => {
-                let optionText = entry.options[optionKey];
-                let isCorrect = entry.correct.includes(optionText);
-                let isSelected = entry.selected.includes(optionText);
-
-                summaryContainer.innerHTML += `
-                    <li class="${isCorrect ? 'correct-border' : ''} ${isSelected && !isCorrect ? 'incorrect' : ''}">
-                        ${optionText} ${isSelected ? '<strong>(✔️ Selectat)</strong>' : ''}
-                    </li>`;
-            });
-
-        });
+    // Show congrats message if all answers are correct
+    if (correctCount === questionPool.length) {
+        summaryContainer1.innerHTML += `<p>Felicitări! Ai răspuns corect la toate întrebările!</p>`;
+        summaryContainer1.innerHTML += `<img src="assets/catcongrats.gif" alt="Congratulations GIF" class="img-fluid mt-4 gifpisica">`;
     } else {
-        summaryContainer.innerHTML += `<p>Felicitări! Ai răspuns corect la toate întrebările!</p>`;
-        summaryContainer.innerHTML += `<img src="assets/catcongrats.gif" alt="Congratulations GIF" class="img-fluid mt-4 gifpisica">`;
+        summaryContainer1.innerHTML += `<p>Spor la învățat!</p>`;
+    }
 
-        summaryContainer.innerHTML += `<h4>Grile: </h4>`;
-        correctQuestions.forEach((entry, index) => {
-            
-            summaryContainer.innerHTML += `<div class="summary-item">
+    // Display all questions
+    questionPool.forEach((entry, index) => {
+        // Create a container for each question
+        summaryContainer2.innerHTML += `<div class="summary-item">
             <p><strong>${index + 1}. ${entry.question}</strong></p>
             <ul>`;
 
-            Object.keys(entry.options).forEach(optionKey => {
-            let optionText = entry.options[optionKey];
-            let isCorrect = entry.correct.includes(optionText);
-            let isSelected = entry.selected.includes(optionText);
+        // Display each option
+        Object.keys(entry.answers).forEach(optionKey => {
+            let optionText = entry.answers[optionKey];
+            let isCorrect = entry.correct.includes(optionKey); // Check if the option is correct
+            let isSelected = selectedAnswers.includes(optionKey); // Check if the option was selected
 
-            summaryContainer.innerHTML += `
-                <li class="${isCorrect ? 'correct-border' : ''} ${isSelected && !isCorrect ? 'incorrect' : ''}">
-                ${optionText} ${isSelected ? '<strong>(✔️ Selectat)</strong>' : ''}
+            // Add classes for correct and incorrect answers
+            let liClass = "";
+            if (isCorrect) {
+                liClass += "correct-border"; // Highlight correct answers
+            }
+            if (isSelected && !isCorrect) {
+                liClass += " incorrect"; // Highlight incorrect selections
+            }
+
+            // Display the option text and mark if it was selected
+            summaryContainer2.innerHTML += `
+                <li class="${liClass}">
+                    ${optionText} ${isSelected ? '<strong>(✔️ Selectat)</strong>' : ''}
                 </li>`;
-            });
-            summaryContainer.innerHTML += `</ul></div><hr>`;
-
-            
         });
 
-    }
+        // Close the question container
+        summaryContainer2.innerHTML += `</ul></div><hr>`;
+    });
 }
 
 
