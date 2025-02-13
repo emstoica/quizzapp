@@ -1,7 +1,15 @@
+:root{
+    --primary-color: #9da4f1;
+    --secondary-color: #6e20b1;
+    --tertiary-color: #552a30;
+    --accent-color: #455f16;
+}
+
+
 body {
     font-family: "Zilla Slab", serif;
     text-align: center;
-    background-color: #fff9dd;
+    background-color: var(--primary-color);
 }
 
 /* Global */
@@ -12,6 +20,7 @@ body {
 
 /* Buttons */
 button {
+    background-color: var(--secondary-color);
     margin-top: 10px;
     padding: 10px;
     font-size: 16px;
@@ -60,6 +69,12 @@ hr{
 
 /* Start screen */
 
+.toast{
+    width: 90%;
+}
+.grileselecttext{
+    font-weight: 600;
+}
 .filtrutitlu{
     font-weight: 600;
 }
