@@ -10,6 +10,7 @@ body {
     font-family: "Zilla Slab", serif;
     text-align: center;
     background-color: var(--primary-color);
+    height: 100%;
 }
 
 /* Global */
@@ -19,14 +20,6 @@ body {
 }
 
 /* Buttons */
-button {
-    background-color: var(--secondary-color);
-    margin-top: 10px;
-    padding: 10px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
 
 .answer-button {
     background-color: white;
@@ -75,6 +68,7 @@ hr{
 .grileselecttext{
     font-weight: 600;
 }
+
 .filtrutitlu{
     font-weight: 600;
 }
