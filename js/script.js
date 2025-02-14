@@ -5,6 +5,78 @@ let questionPool = [];
 let correctCount = 0;
 let wrongQuestions = [];
 let correctQuestions = [];
+let timerInterval;
+let startTime;
+let countdownTime;
+let isTimerVisible = true;
+
+//Timer
+// Timer display elements
+const timerText = document.getElementById('timer-text');
+const timerDisplay = document.getElementById('timer-display');
+const toggleTimerButton = document.getElementById('toggle-timer');
+
+// Timer controls
+const timerTypeRadios = document.querySelectorAll('input[name="timer-type"]');
+const countdownSettings = document.getElementById('countdown-settings');
+const countdownMinutesInput = document.getElementById('countdown-minutes');
+
+// Time's up popup
+const timeUpPopup = document.getElementById('time-up-popup');
+const continueQuizButton = document.getElementById('continue-quiz');
+const restartQuizButton = document.getElementById('restart-quiz');
+
+// Event listeners
+timerTypeRadios.forEach(radio => {
+    radio.addEventListener('change', () => {
+        if (radio.value === 'countdown') {
+            countdownSettings.style.display = 'block';
+        } else {
+            countdownSettings.style.display = 'none';
+        }
+    });
+});
+
+toggleTimerButton.addEventListener('click', toggleTimer);
+continueQuizButton.addEventListener('click', () => timeUpPopup.style.display = 'none');
+restartQuizButton.addEventListener('click', restartQuiz);
+
+// Update timer (counts up)
+function updateTimer() {
+    const elapsedTime = Date.now() - startTime;
+    timerText.textContent = formatTime(elapsedTime);
+}
+
+// Update countdown (counts down)
+function updateCountdown() {
+    const elapsedTime = Date.now() - startTime;
+    const remainingTime = countdownTime - elapsedTime;
+
+    if (remainingTime <= 0) {
+        clearInterval(timerInterval);
+        timerText.textContent = '00:00:00';
+        timeUpPopup.style.display = 'block';
+    } else {
+        timerText.textContent = formatTime(remainingTime);
+    }
+}
+
+// Format time as HH:MM:SS
+function formatTime(milliseconds) {
+    const totalSeconds = Math.floor(milliseconds / 1000);
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+}
+
+// Toggle timer visibility
+function toggleTimer() {
+    isTimerVisible = !isTimerVisible;
+    timerText.style.display = isTimerVisible ? 'inline' : 'none';
+    toggleTimerButton.textContent = isTimerVisible ? 'Hide Timer' : 'Show Timer';
+}
 
 // Load questions
 async function loadQuestions() {
@@ -32,8 +104,26 @@ function filterQuestions(allQuestions) {
     return allQuestions.filter(q => selectedSubjects.includes(q.Materie));
 }
 
-// Update the Start Quiz function to filter questions
+// Start timer or countdown automatically when quiz starts
 async function startQuiz() {
+    const selectedTimerType = document.querySelector('input[name="timer-type"]:checked').value;
+
+    if (selectedTimerType === 'timer') {
+        startTime = Date.now();
+        timerInterval = setInterval(updateTimer, 1000);
+        timerDisplay.style.display = 'block';
+    } else if (selectedTimerType === 'countdown') {
+        const minutes = parseInt(countdownMinutesInput.value);
+        countdownTime = minutes * 60 * 1000; // Convert minutes to milliseconds
+        startTime = Date.now();
+        timerInterval = setInterval(updateCountdown, 1000);
+        timerDisplay.style.display = 'block';
+    } else {
+        // None selected: hide timer display
+        timerDisplay.style.display = 'none';
+    }
+
+    // Update the Start Quiz function to filter questions
     await loadQuestions();
 
     // Filter questions using the filter options from the start screen
@@ -53,7 +143,6 @@ async function startQuiz() {
 
     loadQuestion();
 }
-
 
 // Load Question
 function loadQuestion() {
@@ -234,6 +323,18 @@ function showSummary() {
     // Display final score
     summaryContainer1.innerHTML = `<h3>Scor final: ${correctCount} / ${questionPool.length}</h3>`;
 
+   // Display timer or countdown results
+   const selectedTimerType = document.querySelector('input[name="timer-type"]:checked').value;
+   const summaryContainer = document.getElementById('summary-container');
+
+   if (selectedTimerType === 'timer') {
+       const elapsedTime = Date.now() - startTime;
+       summaryContainer.innerHTML += `<p>Total time taken: ${formatTime(elapsedTime)}</p>`;
+   } else if (selectedTimerType === 'countdown') {
+       const remainingTime = countdownTime - (Date.now() - startTime);
+       summaryContainer.innerHTML += `<p>Time left: ${formatTime(remainingTime)}</p>`;
+   }
+
     // Show congrats message if all answers are correct
     if (correctCount === questionPool.length) {
         summaryContainer1.innerHTML += `<p>Felicitări! Ai răspuns corect la toate întrebările!</p>`;
@@ -285,6 +386,12 @@ function restartQuiz() {
     correctQuestions = [];
     document.getElementById("quiz-summary").style.display = "none";
     document.getElementById("start-screen").style.display = "block";
+
+    clearInterval(timerInterval);
+    timeUpPopup.style.display = 'none';
+    startTimerButton.disabled = false;
+    timerText.textContent = '00:00:00';
+    timerDisplay.style.display = 'none';
 }
 
 // Show Toast Notification
