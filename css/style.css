@@ -65,6 +65,13 @@ button:disabled {
     margin: 10px;
 }
 
+#countdown-settings {
+    display: none; /* Initially hidden */
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+}
+
 /* Headings styling */
 
 h1 {
@@ -129,6 +136,10 @@ hr{
     border: 3px solid rgb(128, 0, 0) !important;
     border-radius: 4px;
 
+}
+
+.form-control{
+    width: 100px;
 }
 
 /* Summary screen */

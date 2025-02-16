@@ -27,19 +27,28 @@ const continueQuizButton = document.getElementById('continue-quiz');
 const restartQuizButton = document.getElementById('restart-quiz');
 
 // Event listeners
-timerTypeRadios.forEach(radio => {
-    radio.addEventListener('change', () => {
-        if (radio.value === 'countdown') {
-            countdownSettings.style.display = 'block';
-        } else {
-            countdownSettings.style.display = 'none';
-        }
-    });
-});
+document.addEventListener('DOMContentLoaded', () => {
+    const timerTypeRadios = document.querySelectorAll('input[name="timer-type"]');
+    const countdownSettings = document.getElementById('countdown-settings');
 
-toggleTimerButton.addEventListener('click', toggleTimer);
-continueQuizButton.addEventListener('click', () => timeUpPopup.style.display = 'none');
-restartQuizButton.addEventListener('click', restartQuiz);
+    // Function to toggle countdown settings visibility
+    const toggleCountdownSettings = () => {
+        const selectedTimerType = document.querySelector('input[name="timer-type"]:checked').value;
+        if (selectedTimerType === 'countdown') {
+            countdownSettings.style.display = 'flex'; // Show countdown settings
+        } else {
+            countdownSettings.style.display = 'none'; // Hide countdown settings
+        }
+    };
+
+    // Add event listeners to radio buttons
+    timerTypeRadios.forEach(radio => {
+        radio.addEventListener('change', toggleCountdownSettings);
+    });
+
+    // Set initial state based on the selected radio button
+    toggleCountdownSettings();
+});
 
 // Update timer (counts up)
 function updateTimer() {
@@ -400,4 +409,3 @@ window.onload = function() {
     let toast = new bootstrap.Toast(toastElement, { autohide: false });
     toast.show();
 };
-
