@@ -38,6 +38,16 @@ button:disabled {
 
 /* Timer */
 
+.showSVG, .hideSVG {
+    height: auto;
+    width: 2.5em;
+    color: var(--tertiary-color);
+}
+
+.badge{
+    background-color: var(--secondary-color);
+}
+
 #timer-controls {
     margin: 20px;
 }
@@ -74,15 +84,10 @@ button:disabled {
 
 /* Headings styling */
 
-h1 {
+h1, h2, h3 {
     font-weight: 700;
 }
-h2 {
-    font-weight: 500;
-}
-h3{
-    font-weight: 600;
-}
+
 
 /*  */
 
@@ -119,6 +124,8 @@ hr{
 /* Quiz screen */
 #question-counter{
     text-shadow: 2px 2px 4px #a77f95;
+    margin-bottom: 0px;
+    font-size: 1em;
 }
 
 .selected {

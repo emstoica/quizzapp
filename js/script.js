@@ -15,6 +15,21 @@ let isTimerVisible = true;
 const timerText = document.getElementById('timer-text');
 const timerDisplay = document.getElementById('timer-display');
 const toggleTimerButton = document.getElementById('toggle-timer');
+const showSVG = document.getElementById('showSVG');
+const hideSVG = document.getElementById('hideSVG');
+
+// Toggle timer visibility
+function toggleTimer() {
+    isTimerVisible = !isTimerVisible;
+    
+    // Toggle the timer visibility with d-none class
+    timerText.classList.toggle('d-none', !isTimerVisible);
+    
+    // Toggle the button text and SVG
+    // toggleTimerButton.textContent = isTimerVisible ? 'Hide Timer' : 'Show Timer';
+    showSVG.classList.toggle('d-none', isTimerVisible);
+    hideSVG.classList.toggle('d-none', !isTimerVisible);
+}
 
 // Timer controls
 const timerTypeRadios = document.querySelectorAll('input[name="timer-type"]');
@@ -35,11 +50,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggleCountdownSettings = () => {
         const selectedTimerType = document.querySelector('input[name="timer-type"]:checked').value;
         if (selectedTimerType === 'countdown') {
-            countdownSettings.style.display = 'flex'; // Show countdown settings
+            countdownSettings.classList.remove('d-none');  // Show countdown settings
+            countdownSettings.classList.add('d-flex');
         } else {
-            countdownSettings.style.display = 'none'; // Hide countdown settings
+            countdownSettings.classList.remove('d-flex');  // Hide countdown settings
+            countdownSettings.classList.add('d-none');
         }
     };
+    
 
     // Add event listeners to radio buttons
     timerTypeRadios.forEach(radio => {
@@ -49,6 +67,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Set initial state based on the selected radio button
     toggleCountdownSettings();
 });
+
+let isTimerRunning = false;  // Track if the timer has started
 
 // Update timer (counts up)
 function updateTimer() {
@@ -63,80 +83,131 @@ function updateCountdown() {
 
     if (remainingTime <= 0) {
         clearInterval(timerInterval);
-        timerText.textContent = '00:00:00';
+        timerText.textContent = '00:00';
         timeUpPopup.style.display = 'block';
     } else {
         timerText.textContent = formatTime(remainingTime);
     }
 }
 
-// Format time as HH:MM:SS
+// Format time as MM:SS or HH:MM:SS
 function formatTime(milliseconds) {
     const totalSeconds = Math.floor(milliseconds / 1000);
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = totalSeconds % 60;
 
-    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    // If time exceeds 60 minutes, format as HH:MM:SS
+    if (hours > 0) {
+        return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    } else {
+        // Otherwise, format as MM:SS
+        return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
 }
 
-// Toggle timer visibility
-function toggleTimer() {
-    isTimerVisible = !isTimerVisible;
-    timerText.style.display = isTimerVisible ? 'inline' : 'none';
-    toggleTimerButton.textContent = isTimerVisible ? 'Hide Timer' : 'Show Timer';
-}
+
+
 
 // Load questions
 async function loadQuestions() {
+    console.log('Loading questions...');
     const response = await fetch('cleaned-questions.json');
     questions = await response.json();
+    console.log(`Loaded ${questions.length} questions`);
 }
 
 // Filter questions based on selected topic
 function filterQuestions(allQuestions) {
+    console.log('Filtering questions...');
     const checkboxes = document.querySelectorAll('.materie-option');
-    // If "all" is checked, return all questions
-    for (let cb of checkboxes) {
-        if (cb.value === "all" && cb.checked) {
-            return allQuestions;
-        }
-    }
-    // Otherwise, collect selected subjects
     let selectedSubjects = [];
+
     checkboxes.forEach(cb => {
         if (cb.value !== "all" && cb.checked) {
             selectedSubjects.push(cb.value);
         }
     });
-    // Filter questions where the "Materie" field matches one of the selected subjects
+
+    console.log(`Selected subjects: ${selectedSubjects.join(', ')}`);
+    if (selectedSubjects.length === 0) {
+        console.log("No subjects selected, returning all questions.");
+        return allQuestions;
+    }
+
     return allQuestions.filter(q => selectedSubjects.includes(q.Materie));
 }
 
+document.querySelectorAll('.materie-option').forEach(switchEl => {
+    switchEl.addEventListener('change', function() {
+        const allSwitch = document.getElementById('all');
+        const allSelected = document.querySelectorAll('.materie-option:checked').length;
+
+        console.log('Switch changed:', this.id);
+        console.log('Currently selected switches:', allSelected);
+
+        // If any Materie switch (except "Toate") is selected, uncheck the "Toate" switch
+        if (this !== allSwitch && this.checked) {
+            allSwitch.checked = false;
+            console.log('Toate switch unchecked');
+        }
+
+        // If all Materie switches are selected, check "Toate"
+        if (allSelected === 5) {  // Assuming 5 Materie switches
+            allSwitch.checked = true;
+            console.log('All Materie switches selected. Toate is checked');
+            document.querySelectorAll('.materie-option').forEach(el => {
+                if (el !== allSwitch) el.checked = false;
+            });
+        }
+
+        // If "Toate" is checked, uncheck all other switches
+        if (allSwitch.checked) {
+            console.log('Toate is checked. Unchecking other switches');
+            document.querySelectorAll('.materie-option').forEach(el => {
+                if (el !== allSwitch) el.checked = false;
+            });
+        }
+
+        console.log('Toate switch checked:', allSwitch.checked);
+        console.log('Final selected switches:', document.querySelectorAll('.materie-option:checked').length);
+    });
+});
+
+
 // Start timer or countdown automatically when quiz starts
 async function startQuiz() {
+    console.log('Starting quiz...');
     const selectedTimerType = document.querySelector('input[name="timer-type"]:checked').value;
+    console.log(`Selected timer type: ${selectedTimerType}`);
 
+    // Show or hide the timer based on the selection
     if (selectedTimerType === 'timer') {
+        console.log('Starting timer...');
         startTime = Date.now();
         timerInterval = setInterval(updateTimer, 1000);
-        timerDisplay.style.display = 'block';
+        timerDisplay.classList.remove('d-none');
+        timerDisplay.classList.add('d-block');
     } else if (selectedTimerType === 'countdown') {
+        console.log('Starting countdown...');
         const minutes = parseInt(countdownMinutesInput.value);
         countdownTime = minutes * 60 * 1000; // Convert minutes to milliseconds
         startTime = Date.now();
         timerInterval = setInterval(updateCountdown, 1000);
-        timerDisplay.style.display = 'block';
+        timerDisplay.classList.remove('d-none');
+        timerDisplay.classList.add('d-block');
     } else {
         // None selected: hide timer display
-        timerDisplay.style.display = 'none';
+        console.log('No timer selected.');
+        timerDisplay.classList.add('d-none');
     }
 
-    // Update the Start Quiz function to filter questions
+    // Load questions
     await loadQuestions();
 
     // Filter questions using the filter options from the start screen
     let filteredQuestions = filterQuestions(questions);
+    console.log(`Filtered questions: ${filteredQuestions.length}`);
     if (filteredQuestions.length === 0) {
         alert("Nu există întrebări pentru materiile selectate!");
         return;
@@ -147,19 +218,24 @@ async function startQuiz() {
 
     questionPool = filteredQuestions.sort(() => Math.random() - 0.5).slice(0, numQuestions);
 
-    document.getElementById("start-screen").style.display = "none";
-    document.getElementById("quiz-screen").style.display = "block";
+    // Hide start screen and show quiz screen
+    document.getElementById("start-screen").classList.add("d-none");
+    document.getElementById("quiz-screen").classList.remove("d-none");
 
     loadQuestion();
 }
 
+
 // Load Question
 function loadQuestion() {
+    console.log(`Loading question ${currentQuestionIndex + 1} of ${questionPool.length}`);
     selectedAnswers = [];
     let question = questionPool[currentQuestionIndex];
 
+    console.log(`Question: ${question.question}`);
+
     // Display question counter: 2 out of 13
-    document.getElementById("question-counter").innerText = `Grila ${currentQuestionIndex + 1} din ${questionPool.length}`;
+    document.getElementById("question-counter").innerText = `${currentQuestionIndex + 1} din ${questionPool.length}`;
 
     document.getElementById("question-text").innerText = question.question;
     let answersContainer = document.getElementById("answers-container");
@@ -196,7 +272,7 @@ function loadQuestion() {
     answersContainer.appendChild(debugContainer);
 
     document.getElementById("submit-button").disabled = true;
-    document.getElementById("next-button").style.display = "none";
+    document.getElementById("next-button").classList.add('d-none');
 }
 
 function markCorrect(question) {
@@ -222,18 +298,25 @@ function markWrong(question) {
 
 // Next Question
 function nextQuestion() {
+    console.log(`Moving to next question...`);
     currentQuestionIndex++;
-    
+
     if (currentQuestionIndex < questionPool.length) {
+        console.log(`Next question: ${currentQuestionIndex + 1}`);
         loadQuestion();
     } else {
+        console.log('All questions completed.');
         showSummary();
     }
+
+    document.getElementById("next-button").classList.add('d-none');
+    document.getElementById("submit-button").classList.remove('d-none');
 }
 
 
 // Toggle Answer Selection
 function toggleSelection(button) {
+    console.log(`Answer selected: ${button.innerText}`);
     let choice = button.dataset.choice;
 
     if (selectedAnswers.includes(choice)) {
@@ -249,9 +332,13 @@ function toggleSelection(button) {
 
 // Check Answer Function
 function checkAnswer() {
+    console.log('Checking answer...');
     let question = questionPool[currentQuestionIndex];
     let correctAnswers = question.correct.map(String);
     let selectedSorted = selectedAnswers.sort();
+    
+    console.log(`Correct answers: ${correctAnswers}`);
+    console.log(`User selected: ${selectedSorted}`);
 
     let answerButtons = document.querySelectorAll("#answers-container button");
     let isCorrect = JSON.stringify(selectedSorted) === JSON.stringify(correctAnswers);
@@ -262,7 +349,7 @@ function checkAnswer() {
         let choice = btn.dataset.choice;
 
         if (correctAnswers.includes(choice)) {
-            btn.classList.add("correct-border"); // Green border for correct answers
+            btn.classList.add("correct-border"); // Green border for correct anssswers
         }
         if (selectedAnswers.includes(choice)) {
             btn.classList.add("bold-text"); // Bold only selected answers
@@ -293,16 +380,16 @@ function checkAnswer() {
     }
 
     // Hide "Submit Answer" button and show either "Next Question" or "See Results" button
-    document.getElementById("submit-button").style.display = "none";
+    document.getElementById("submit-button").classList.add('d-none');
 
     if (currentQuestionIndex === questionPool.length - 1) {
         // Show "See Results" button on the last question
-        document.getElementById("next-button").style.display = "none";
-        document.getElementById("check-results-button").style.display = "block";
+        document.getElementById("next-button").classList.add('d-none');
+        document.getElementById("check-results-button").classList.remove('d-none');
     } else {
         // Show "Next Question" button for all other questions
-        document.getElementById("next-button").style.display = "block";
-        document.getElementById("check-results-button").style.display = "none";
+        document.getElementById("next-button").classList.remove('d-none');
+        document.getElementById("check-results-button").classList.add('d-none');
     }
 }
 
@@ -317,14 +404,15 @@ function nextQuestion() {
     }
 
     // Hide "Next Question" button and show "Submit Answer" button for next question
-    document.getElementById("next-button").style.display = "none";
-    document.getElementById("submit-button").style.display = "block";
+    document.getElementById("next-button").classList.add('d-none');
+    document.getElementById("submit-button").classList.remove('d-none');
 }
 
 // Show Quiz Summary
 function showSummary() {
-    document.getElementById("quiz-screen").style.display = "none";
-    document.getElementById("quiz-summary").style.display = "block";
+    console.log('Displaying quiz summary...');
+    document.getElementById("quiz-screen").classList.add('d-none');
+    document.getElementById("quiz-summary").classList.remove('d-none');
 
     let summaryContainer1 = document.getElementById("summary-container");
     let summaryContainer2 = document.getElementById("summary-container2");
@@ -393,12 +481,11 @@ function restartQuiz() {
     correctCount = 0;
     wrongQuestions = [];
     correctQuestions = [];
-    document.getElementById("quiz-summary").style.display = "none";
-    document.getElementById("start-screen").style.display = "block";
+    document.getElementById("quiz-summary").classList.add('d-none');
+    document.getElementById("start-screen").classList.remove('d-none');
 
     clearInterval(timerInterval);
     timeUpPopup.style.display = 'none';
-    startTimerButton.disabled = false;
     timerText.textContent = '00:00:00';
     timerDisplay.style.display = 'none';
 }
