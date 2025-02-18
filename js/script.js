@@ -318,23 +318,23 @@ function loadQuestion() {
 
 
     
-    // Add debug buttons
-    let debugContainer = document.createElement("div");
-    debugContainer.classList.add("debug-buttons", "mt-3");
+    // // Add debug buttons
+    // let debugContainer = document.createElement("div");
+    // debugContainer.classList.add("debug-buttons", "mt-3");
 
-    let correctButton = document.createElement("button");
-    correctButton.innerText = "Mark Correct";
-    correctButton.classList.add("btn", "btn-success", "mr-2");
-    correctButton.onclick = () => markCorrect(question);
-    debugContainer.appendChild(correctButton);
+    // let correctButton = document.createElement("button");
+    // correctButton.innerText = "Mark Correct";
+    // correctButton.classList.add("btn", "btn-success", "mr-2");
+    // correctButton.onclick = () => markCorrect(question);
+    // debugContainer.appendChild(correctButton);
 
-    let wrongButton = document.createElement("button");
-    wrongButton.innerText = "Mark Wrong";
-    wrongButton.classList.add("btn", "btn-danger");
-    wrongButton.onclick = () => markWrong(question);
-    debugContainer.appendChild(wrongButton);
+    // let wrongButton = document.createElement("button");
+    // wrongButton.innerText = "Mark Wrong";
+    // wrongButton.classList.add("btn", "btn-danger");
+    // wrongButton.onclick = () => markWrong(question);
+    // debugContainer.appendChild(wrongButton);
 
-    answersContainer.appendChild(debugContainer);
+    // answersContainer.appendChild(debugContainer);
 
 }
 
