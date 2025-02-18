@@ -6905,8 +6905,8 @@
     "question": "(SEP2021) Judecătoria X pronunţă sentinţa nr. Y/2021 care este comunicată părţilor în data de marţi, 20 iulie 2021. Având în vedere că, în acest caz, legea prevede că se poate formula apel în termen de 3 (trei) zile de la comunicarea hotărârii, termenul de apel:",
     "answers": {
       "1": "A. se va împlini vineri, 23 iulie 2021;",
-      "2": "B. se va împlini luni, ;",
-      "3": "C. se va împlini miercuri, ."
+      "2": "B. se va împlini luni, 26 iulie 2021;",
+      "3": "C. se va împlini miercuri, 22 iulie 2021."
     },
     "correct": [
       "2"

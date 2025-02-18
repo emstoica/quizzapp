@@ -403,6 +403,11 @@ function skipQuestion() {
         }
 
         loadQuestion();
+        let buttons = document.querySelectorAll(".answer-button");
+        buttons.forEach(button => {
+            button.classList.remove('selected');
+        });
+
     }
 }
 
