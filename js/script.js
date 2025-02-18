@@ -1,6 +1,5 @@
 let questions = [];
 let currentQuestionIndex = 0;
-// Track selected answers per question
 let selectedAnswers = {};
 let questionPool = [];
 let correctCount = 0;
@@ -67,6 +66,10 @@ const countdownMinutesInput = document.getElementById('countdown-minutes');
 const timeUpPopup = document.getElementById('time-up-popup');
 const continueQuizButton = document.getElementById('continue-quiz');
 const restartQuizButton = document.getElementById('restart-quiz');
+
+function continueQuiz() {
+    timeUpPopup.classList.add('d-none');
+}
 
 // Event listeners
 document.addEventListener('DOMContentLoaded', () => {
@@ -527,7 +530,7 @@ function showSummary() {
     let summaryContainer2 = document.getElementById("summary-container2");
 
     // Display final score
-    summaryContainer1.innerHTML = `<h3>Scor final: ${correctCount} / ${questionPool.length}</h3>`;
+    summaryContainer1.innerHTML = `<h3 class="scor">Scor final: ${correctCount} / ${questionPool.length}</h3>`;
 
     // Display timer or countdown results
     const selectedTimerType = document.querySelector('input[name="timer-type"]:checked').value;
@@ -535,16 +538,16 @@ function showSummary() {
 
     if (selectedTimerType === 'timer') {
         const elapsedTime = Date.now() - startTime;
-        summaryContainer.innerHTML += `<p>Total time taken: ${formatTime(elapsedTime)}</p>`;
+        summaryContainer.innerHTML += `<p>Durată: ${formatTime(elapsedTime)}</p>`;
     } else if (selectedTimerType === 'countdown') {
         const remainingTime = countdownTime - (Date.now() - startTime);
-        summaryContainer.innerHTML += `<p>Time left: ${formatTime(remainingTime)}</p>`;
+        summaryContainer.innerHTML += `<p>Timp rămas: ${formatTime(remainingTime)}</p>`;
     }
 
     // Show congrats message if all answers are correct
     if (correctCount === questionPool.length) {
-        summaryContainer1.innerHTML += `<p>Felicitări! Ai răspuns corect la toate întrebările!</p>`;
-        summaryContainer1.innerHTML += `<img src="assets/catcongrats.gif" alt="Congratulations GIF" class="img-fluid mt-4 gifpisica">`;
+        summaryContainer1.innerHTML += `<p><strong>Felicitări! Ai răspuns corect la toate întrebările!</strong></p>`;
+        summaryContainer1.innerHTML += `<img src="assets/catcongrats.gif" alt="Congratulations GIF" class="img-fluid mt-2 gifpisica">`;
     } else {
         summaryContainer1.innerHTML += `<p>Spor la învățat!</p>`;
     }
@@ -590,6 +593,11 @@ function restartQuiz() {
     document.getElementById("quiz-screen").classList.add('d-none');
     document.getElementById("start-screen").classList.remove('d-none');
     document.getElementById("time-up-popup").classList.add('d-none');
+    const accordionElement = document.getElementById("collapseOne"); // The actual collapsible content
+    const bsCollapse = new bootstrap.Collapse(accordionElement, {
+        toggle: false
+    });
+    bsCollapse.hide(); // Collapses the accordion body
 
 
     selectedAnswers = [];

@@ -40,22 +40,17 @@ body {
 
 
 /* Center the SVG inside the button */
-.darkModeSVG {
+.darkModeSVG{
     width: 1.5em; /* Adjust size */
     filter: invert(1) brightness(100%);
     height: auto;
     object-fit: contain;
 }
 
-body.dark .darkModeSVG {
+body.dark .darkModeSVG, body.dark .hideSVG, body.dark .showSVG {
     filter: invert(0); /* Invert color for dark mode */
 }
 
-
-
-.bold-text{
-    font-weight: 900;
-}
 
 
 /* Remove number input spinner in all browsers */
@@ -73,40 +68,42 @@ body.dark .darkModeSVG {
 
 /* Buttons */
 /* Style for disabled answer buttons */
-button.disabled-answer {
-    pointer-events: none; /* Disable interaction (no click) */
-    opacity: 1; /* Keep the original opacity (not greyed out) */
-}
 
 
-.answer-button {
-    background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    transition: background 0.3s ease, border 0.3s ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
-}
 
-button:disabled {
-    background-color: #e0e0e0;
-    cursor: not-allowed;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
-}
 .list-group-item {
     text-align: left;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
+}
+.start-button{
+    background-color: var(--color-accent);
+    color: var(--color-primary);
+    font-weight: 600;
+    transition: all 0.3s ease-in-out;
+}
+
+.start-button:hover{
+    background-color: var(--color-accent);
+    color: var(--color-primary);
+    filter: hue-rotate(50deg);
 }
 
 /* Timer */
 
 .showSVG, .hideSVG {
     height: auto;
-    width: 2.5em;
+    width: 2.2em;
     color: var(--tertiary-color);
+}
+
+body.dark .hideSVG, body.dark .showSVG {
+    filter: invert(1); /* Invert color for dark mode */
 }
 
 .badge{
     background-color: var(--color-accent);
+    color: var(--color-primary);
+    font-size: 1em;
 }
 
 #timer-controls, .grileselect, #materie-filter {
@@ -116,7 +113,6 @@ button:disabled {
 }
 
 #timer-display {
-    font-size: 24px;
     font-weight: bold;
     margin: 20px;
 }
@@ -126,16 +122,26 @@ button:disabled {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: white;
+    background: var(--color-accent);
+    color: var(--color-primary);
+    font-weight: 700;
+    font-size: 2em;
     padding: 20px;
-    border: 1px solid #ccc;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: .8em;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.694);
     z-index: 1000;
     text-align: center;
 }
 
 #time-up-popup button {
-    margin: 10px;
+    margin: .2em;
+}
+
+#continue-quiz{
+    background-color: grey;
+    color: white;
+    transition: all 0.3s ease-in-out;
+    border: none;
 }
 
 #countdown-settings {
@@ -179,6 +185,12 @@ hr{
     color: var(--color-accent);
     text-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
 }
+.start-screen-options{
+    max-width: 16.3em;
+}
+.start-screen-details{
+    max-width: 38em;
+}
 .grileselecttext, .filtrutitlu {
     color: var(--color-accent);
     font-weight: 600;
@@ -190,27 +202,31 @@ hr{
 }
 
 /* Quiz screen */
-#question-counter{
-    text-shadow: 2px 2px 4px #a77f95;
-    margin-bottom: 0px;
-    font-size: 1em;
+button.disabled-answer {
+    pointer-events: none; /* Disable interaction (no click) */
+    opacity: 1; /* Keep the original opacity (not greyed out) */
 }
 
-.selected {
-    background-color: lightblue;
-    font-weight: bold;
+.answer-button, .restart-button, #submit-button, #skip-button, #next-button, #see-results-button, #continue-quiz{
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: .8em;
 }
-.bold-text {
+
+#submit-button, #skip-button, #next-button, #see-results-button, #continue-quiz, .restart-button{
+    font-weight: 500;
+}
+.selected {
+    background-color: rgb(255, 255, 229);
     font-weight: bold;
 }
 .correct-border {
-    border: 3px solid green !important;
-    border-radius: 4px;
+    border: 3px solid rgb(82, 193, 82) !important;
+    border-radius: .8em;
 }
 .incorrect {
-    border: 3px solid rgb(128, 0, 0) !important;
-    border-radius: 4px;
-
+    border: 3px solid rgb(242, 99, 99) !important;
+    border-radius: .8em;
 }
 
 .form-control{
@@ -219,6 +235,9 @@ hr{
 
 /* Summary screen */
 
+.scor{
+    color: var(--color-tertiary);
+}
 #quiz-summary ul {
     list-style-type: none;
     padding-left: 0;
@@ -231,6 +250,7 @@ hr{
 #quiz-summary li {
     list-style-type: none; /* Remove the marker */
     margin: 0.5em;
+    padding: .5em;
 }
 .summary-item {
     text-align: left; /* Align text to the left */
@@ -245,20 +265,60 @@ hr{
     border-radius: 4px;
 }
 .accordion-item{
-    background-color: #f1f1f100;
-    border: #00000000;
+    background-color: transparent;
+    border: none;
 }
 .accordion-button{
-    background-color: #c3bd7a;
-    font-weight: 600;
-   
+    background-color: hsl(260, 80%, 80%);
+    color: var(--color-primary);
+    font-weight: 600; 
+    transform: scale(1);
+    transform-origin: top;
+    transition: all 0.3s ease-in-out;
 }
+
+ .accordion-button.collapsed{
+    background-color: hsl(260, 80%, 80%);
+    color: hsl(200, 50%, 10%);
+    transform: scale(1);
+    transform-origin: top;
+    transition: all 0.3s ease-in-out;
+    max-width: 23em;
+    font-weight: 600; 
+}
+
+
 .accordion-button:not(.collapsed){
-    background-color: #c3bd7a;
+    background-color: hsl(260, 80%, 80%);
+    color: hsl(200, 50%, 10%);
+    font-weight: 600; 
+    transform: scale(1);
+    transform-origin: top;
+    transition: all 0.2s ease-in-out;
+
 }
+
 .accordion-body{
-    background-color: #c3bd7a7d;
+    background-color: hsl(260, 80%, 80%);
+    filter: brightness(120%) saturate(60%);
+    border-bottom-left-radius: .5em;
+    border-bottom-right-radius: .5em;
 }
+
+.accordion-collapse {
+    transform: scale(0);
+    transform-origin: top;
+    transition: all 0.2s ease-in-out;
+}
+
+/* When the accordion is open */
+.accordion-collapse.show {
+    transform: scale(1);
+    transform-origin: top;
+    transition: all 0.3s ease-in-out;
+}
+
+
 
 
 

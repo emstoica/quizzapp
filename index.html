@@ -34,97 +34,100 @@
             </div>
         </div>
 
-        <div class="row text-center">
+        <div class="row text-center start-screen-details">
             <img src="assets/law2.png" alt="Law-related illustration" class="img-fluid lawimage mt-3 mx-auto d-block">
             <h1 class="titlestartscreen">Grile admitere Barou</h1>
             <p class="mt-3">Testează-ți cunoștințele. Selectează numărul de grile, timpul și începe testul.</p>
             <p class="mt-1">Grilele sunt preluate din subiectele examenului de primire în profesia de avocat (pentru dobândirea titlului profesional de avocat <b class="accent">stagiar</b>) din anii precedenți.</p>
         </div>
+        <div class="start-screen-options d-flex flex-column align-items-center">
+            <!-- Timer/Countdown Controls -->
+            <div id="timer-controls" class="d-inline d-flex flex-column justify-content-center align-items-center mt-3">
+                <label for="question-count" class="grileselecttext mb-2">Selectează tipul de monitorizare a timpului:</label>
+                <div>
+                    <!-- None Option -->
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="timer-type" id="timer-none" value="none" checked>
+                        <label class="form-check-label" for="timer-none">Fără</label>
+                    </div>
 
-        <!-- Timer/Countdown Controls -->
-        <div id="timer-controls" class="d-inline d-flex flex-column justify-content-center align-items-center mt-3">
-            <label for="question-count" class="grileselecttext mb-2">Selectează tipul de monitorizare a timpului:</label>
-          
-            <!-- None Option -->
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="timer-type" id="timer-none" value="none" checked>
-                <label class="form-check-label" for="timer-none">Fără</label>
+                    <!-- Timer Option -->
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="timer-type" id="timer-timer" value="timer">
+                        <label class="form-check-label" for="timer-timer">Cronometru</label>
+                    </div>
+
+                    <!-- Countdown Option -->
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="timer-type" id="timer-countdown" value="countdown">
+                        <label class="form-check-label" for="timer-countdown">Temporizator</label>
+                    </div>
+                
+
+                    <!-- Countdown Settings -->
+                    <div id="countdown-settings" class="d-flex justify-content-center align-items-center">
+                        <div class="countdown-settings container-fluid d-flex flex-column align-items-center">
+                            <label for="countdown-minutes" class="form-label mb-2">Setează timpul (minute):</label>
+                            <div class="col-lg-2 col-md-3 col-sm-4 col-6 d-flex justify-content-center align-items-center">
+                                <input type="number" id="countdown-minutes" class="form-control input-no-spinner" min="1" value="10" max="280">
+                            </div>
+                        </div>
+                    </div>
+                </div>  
+   
             </div>
 
-            <!-- Timer Option -->
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="timer-type" id="timer-timer" value="timer">
-                <label class="form-check-label" for="timer-timer">Cronometru</label>
-            </div>
-
-            <!-- Countdown Option -->
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="timer-type" id="timer-countdown" value="countdown">
-                <label class="form-check-label" for="timer-countdown">Temporizator</label>
-            </div>
-         
-
-            <!-- Countdown Settings -->
-            <div id="countdown-settings" class="d-flex justify-content-center align-items-center">
-                <div class="countdown-settings container-fluid d-flex flex-column align-items-center">
-                    <label for="countdown-minutes" class="form-label mb-2">Setează timpul (minute):</label>
+            <div class="grileselect d-inline d-flex flex-column align-items-center mt-3">
+                <div class="container-fluid d-flex flex-column align-items-center">
+                    <label for="question-count" class="grileselecttext mb-2">Selectează numărul de grile:</label>
                     <div class="col-lg-2 col-md-3 col-sm-4 col-6 d-flex justify-content-center align-items-center">
-                        <input type="number" id="countdown-minutes" class="form-control input-no-spinner" min="1" value="10">
+                        <input type="number" id="question-count" class="form-control input-no-spinner" min="2" max="100" value="10">
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="grileselect d-inline d-flex flex-column align-items-center mt-3">
-            <div class="container-fluid d-flex flex-column align-items-center">
-                <label for="question-count" class="grileselecttext mb-2">Selectează numărul de grile:</label>
-                <div class="col-lg-2 col-md-3 col-sm-4 col-6 d-flex justify-content-center align-items-center">
-                    <input type="number" id="question-count" class="form-control input-no-spinner" min="1" max="100" value="10">
-                </div>
-            </div>
-        </div>
-    
-        <!-- Filter Section -->
-        <div id="materie-filter" class="d-inline justify-content-center mt-3">
-            <div class="row justify-content-center align-items-center">
-                <div class="col-auto">
-                    <div class="container-fluid d-flex flex-column align-items-start">
-                        <label class="filtrutitlu mb-2">Filtrează după Materie:</label><br>
-                        <!-- "Toate" Switch -->
-                        <div class="form-check form-switch">
-                            <input class="form-check-input materie-option" type="checkbox" id="all" value="all" checked>
-                            <label class="form-check-label" for="all">Toate</label>
-                        </div>
-                        <!-- Materie1 Switch -->
-                        <div class="form-check form-switch">
-                            <input class="form-check-input materie-option" type="checkbox" id="Materie1" value="OEPA">
-                            <label class="form-check-label" for="Materie1">OEPA</label>
-                        </div>
-                        <!-- Materie2 Switch -->
-                        <div class="form-check form-switch">
-                            <input class="form-check-input materie-option" type="checkbox" id="Materie2" value="Drept civil">
-                            <label class="form-check-label" for="Materie2">Drept civil</label>
-                        </div>
-                        <!-- Materie3 Switch -->
-                        <div class="form-check form-switch">
-                            <input class="form-check-input materie-option" type="checkbox" id="Materie3" value="Drept procesual civil">
-                            <label class="form-check-label" for="Materie3">Drept procesual civil</label>
-                        </div>
-                        <!-- Materie4 Switch -->
-                        <div class="form-check form-switch">
-                            <input class="form-check-input materie-option" type="checkbox" id="Materie4" value="Drept penal">
-                            <label class="form-check-label" for="Materie4">Drept penal</label>
-                        </div>
-                        <!-- Materie5 Switch -->
-                        <div class="form-check form-switch">
-                            <input class="form-check-input materie-option" type="checkbox" id="Materie5" value="Drept procesual penal">
-                            <label class="form-check-label" for="Materie5">Drept procesual penal</label>
+        
+            <!-- Filter Section -->
+            <div id="materie-filter" class="d-inline justify-content-center mt-3">
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-auto">
+                        <div class="container-fluid d-flex flex-column align-items-start">
+                            <label class="filtrutitlu mb-2">Filtrează după Materie:</label><br>
+                            <!-- "Toate" Switch -->
+                            <div class="form-check form-switch">
+                                <input class="form-check-input materie-option" type="checkbox" id="all" value="all" checked>
+                                <label class="form-check-label" for="all">Toate</label>
+                            </div>
+                            <!-- Materie1 Switch -->
+                            <div class="form-check form-switch">
+                                <input class="form-check-input materie-option" type="checkbox" id="Materie1" value="OEPA">
+                                <label class="form-check-label" for="Materie1">OEPA</label>
+                            </div>
+                            <!-- Materie2 Switch -->
+                            <div class="form-check form-switch">
+                                <input class="form-check-input materie-option" type="checkbox" id="Materie2" value="Drept civil">
+                                <label class="form-check-label" for="Materie2">Drept civil</label>
+                            </div>
+                            <!-- Materie3 Switch -->
+                            <div class="form-check form-switch">
+                                <input class="form-check-input materie-option" type="checkbox" id="Materie3" value="Drept procesual civil">
+                                <label class="form-check-label" for="Materie3">Drept procesual civil</label>
+                            </div>
+                            <!-- Materie4 Switch -->
+                            <div class="form-check form-switch">
+                                <input class="form-check-input materie-option" type="checkbox" id="Materie4" value="Drept penal">
+                                <label class="form-check-label" for="Materie4">Drept penal</label>
+                            </div>
+                            <!-- Materie5 Switch -->
+                            <div class="form-check form-switch">
+                                <input class="form-check-input materie-option" type="checkbox" id="Materie5" value="Drept procesual penal">
+                                <label class="form-check-label" for="Materie5">Drept procesual penal</label>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <button class="btn btn-primary mt-5" onclick="startQuiz()" aria-label="Start the quiz">Începe testul</button>
-        </div>        
+            </div>  
+            <button class="btn start-button mt-5" onclick="startQuiz()" aria-label="Start the quiz">Începe testul</button>
+        </div>      
     </section>
 
     <!-- Quiz Screen -->
@@ -136,11 +139,11 @@
                 <span id="timer-text" class="badge timer">00:00</span>
                 <button id="toggle-timer" onclick="toggleTimer()" class="btn btn-link">
                     <!-- Show SVG initially -->
-                    <span id="hideSVG" class="d-none">
+                    <span id="hideSVG">
                         <img src="assets/hide-timer.svg" alt="Timer Icon" class="hideSVG">
                     </span>
                     <!-- Hide SVG, initially hidden -->
-                    <span id="showSVG">
+                    <span id="showSVG" class="d-none">
                         <img src="assets/show-timer.svg" alt="Timer Icon" class="showSVG">
                     </span>
                 </button>
@@ -150,35 +153,19 @@
         <h2 id="question-text" class="mb-4 mt-4"></h2>
         <div id="answers-container" class="mb-4"></div>
         <div id="button-container" class="d-flex flex-column justify-content-center align-items-center mt-3">
-            <button id="submit-button" class="btn btn-success mt-3 col-lg-2" onclick="checkAnswer()" disabled>Verifică răspuns</button>
-            <button id="next-button" class="btn btn-secondary mt-3 col-lg-2" onclick="nextQuestion()">Următoarea întrebare</button>
-            <button id="see-results-button" class="btn btn-primary mt-3 col-lg-2 d-none" onclick="showSummary()">Vezi Rezultatele</button>
-            <button id="skip-button" class="btn btn-warning mt-3 col-lg-2" onclick="skipQuestion()">Skip for Later</button>
+            <button id="submit-button" class="btn btn-success col-lg-2" onclick="checkAnswer()" disabled>Verifică răspuns</button>
+            <button id="next-button" class="btn btn-secondary col-lg-2" onclick="nextQuestion()">Următoarea întrebare</button>
+            <button id="see-results-button" class="btn btn-primary col-lg-2 d-none" onclick="showSummary()">Vezi Rezultatele</button>
+            <button id="skip-button" class="btn btn-warning mt-3 col-lg-2" onclick="skipQuestion()">Răspunde mai târziu</button>
             
         </div>
 
-       <!-- Timer Display -->
-        <div id="timer-display" class="d-none">
-            <span id="timer-text" class="badge timer">00:00</span>
-            <button id="toggle-timer" onclick="toggleTimer()" class="btn btn-link">
-                <!-- Show SVG initially -->
-                <span id="showSVG">
-                   <img src="assets/show-timer.svg" alt="Timer Icon" class="showSVG">
-                </span>
-                <!-- Hide SVG, initially hidden -->
-                <span id="hideSVG" class="d-none">
-                    <img src="assets/hide-timer.svg" alt="Timer Icon" class="hideSVG">
-                </span>
-            </button>
-        </div>
-
        
-
         <!-- Time's Up Popup -->
         <div id="time-up-popup" class="d-none">
-            <p>Time's up!</p>
-            <button id="continue-quiz" onclick="continueQuiz()">Continue Quiz</button>
-            <button class="btn btn-primary mt-3" onclick="restartQuiz()">Reîncepe Testul</button> 
+            <p>S-a scurs timpul! Scuze :(</p>
+            <button id="continue-quiz" class="btn btn-primary mt-3" onclick="continueQuiz()">Continuă</button>
+            <button class="btn btn-primary mt-3 restart-button" onclick="restartQuiz()">Reîncepe testul</button> 
         </div>
     </section>
 
@@ -188,10 +175,10 @@
         <p id="summary-text" class="fs-5 fw-bold"></p>
         <div id="summary-container"></div>
         <!-- Grile Dropdown -->
-        <div class="accordion">
+        <div class="accordion mt-4">
             <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                <h2 class="d-flex accordion-header justify-content-center">
+                    <button id="grileaccordion" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
                         Grile
                     </button>
                 </h2>
@@ -202,7 +189,7 @@
                 </div>
             </div>
         </div>
-        <button class="btn btn-primary mt-3" onclick="restartQuiz()">Reîncepe Testul</button>
+        <button class="btn btn-primary mt-3 restart-button" onclick="restartQuiz()">Reîncepe testul</button>
     </section>
 
     <!-- Bootstrap 5 JS -->
