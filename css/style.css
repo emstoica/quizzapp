@@ -1,39 +1,100 @@
-:root{
-    --primary-color: #9da4f1;
-    --secondary-color: #6e20b1;
-    --tertiary-color: #552a30;
-    --accent-color: #455f16;
+:root {
+    --color-primary: hsl(200, 50%, 90%);
+    --color-secondary: hsl(200, 50%, 10%);
+    --color-accent: hsl(260, 80%, 20%);
+    --color-tertiary: hsl(140, 80%, 20%);
+}
+.dark {
+    --color-primary: hsl(200, 50%, 10%);
+    --color-secondary: hsl(200, 50%, 90%);
+    --color-accent: hsl(260, 80%, 80%);
+    --color-tertiary: hsl(140, 80%, 80%);
 }
 
 
 body {
     font-family: "Zilla Slab", serif;
     text-align: center;
-    background-color: var(--primary-color);
+    background-color: var(--color-primary);
+    color: var(--color-secondary);
     height: 100%;
 }
 
 /* Global */
 
+/* Ensure the button is positioned at the top-right corner */
+.dark-mode-toggle {
+    background: var(--color-accent);
+    width: 2em; /* Set the width of the circle */
+    height: 2em; /* Set the height to be equal to width */
+    border-radius: 50%; /* Makes it a perfect circle */
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center; /* Centers SVG horizontally */
+    align-items: center; /* Centers SVG vertically */
+    z-index: 1000; /* Ensure the button stays above other content */
+
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
+}
+
+
+/* Center the SVG inside the button */
+.darkModeSVG {
+    width: 1.5em; /* Adjust size */
+    filter: invert(1) brightness(100%);
+    height: auto;
+    object-fit: contain;
+}
+
+body.dark .darkModeSVG {
+    filter: invert(0); /* Invert color for dark mode */
+}
+
+
+
 .bold-text{
     font-weight: 900;
 }
 
+
+/* Remove number input spinner in all browsers */
+.input-no-spinner::-webkit-inner-spin-button,
+.input-no-spinner::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.input-no-spinner {
+    -moz-appearance: textfield; /* Hide arrows in Firefox */
+    appearance: textfield; /* Hide arrows in Chrome */
+}
+
+
 /* Buttons */
+/* Style for disabled answer buttons */
+button.disabled-answer {
+    pointer-events: none; /* Disable interaction (no click) */
+    opacity: 1; /* Keep the original opacity (not greyed out) */
+}
+
 
 .answer-button {
     background-color: white;
     border: 1px solid #ccc;
     border-radius: 4px;
     transition: background 0.3s ease, border 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
 }
 
 button:disabled {
     background-color: #e0e0e0;
     cursor: not-allowed;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
 }
 .list-group-item {
     text-align: left;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
 }
 
 /* Timer */
@@ -45,11 +106,13 @@ button:disabled {
 }
 
 .badge{
-    background-color: var(--secondary-color);
+    background-color: var(--color-accent);
 }
 
-#timer-controls {
-    margin: 20px;
+#timer-controls, .grileselect, #materie-filter {
+    border: 0.2em solid var(--color-tertiary);
+    padding: 1em;
+    border-radius: 1em;
 }
 
 #timer-display {
@@ -81,6 +144,11 @@ button:disabled {
     align-items: center;
     margin-top: 1rem;
 }
+#countdown-minutes, #question-count{
+    max-width: 3em;
+}
+
+
 
 /* Headings styling */
 
@@ -88,8 +156,6 @@ h1, h2, h3 {
     font-weight: 700;
 }
 
-
-/*  */
 
 li{
     background-color: #cfcfcf3f;
@@ -106,19 +172,21 @@ hr{
 .toast{
     width: 90%;
 }
-.grileselecttext{
+#disclaimer{
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
+}
+.titlestartscreen{
+    color: var(--color-accent);
+    text-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
+}
+.grileselecttext, .filtrutitlu {
+    color: var(--color-accent);
     font-weight: 600;
 }
 
-.filtrutitlu{
-    font-weight: 600;
-}
 .lawimage{
-    max-width: 200px;
+    max-width: 10em;
     height: auto;
-}
-.disclaimer{
-    top: 10vw;
 }
 
 /* Quiz screen */
@@ -191,6 +259,7 @@ hr{
 .accordion-body{
     background-color: #c3bd7a7d;
 }
+
 
 
 

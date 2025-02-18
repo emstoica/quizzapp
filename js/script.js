@@ -1,6 +1,7 @@
 let questions = [];
 let currentQuestionIndex = 0;
-let selectedAnswers = [];
+// Track selected answers per question
+let selectedAnswers = {};
 let questionPool = [];
 let correctCount = 0;
 let wrongQuestions = [];
@@ -9,6 +10,32 @@ let timerInterval;
 let startTime;
 let countdownTime;
 let isTimerVisible = true;
+
+// Dark Mode
+const toggleButton = document.getElementById("dark-mode-toggle");
+const body = document.body;
+
+// Check if user has a preferred theme saved
+if (localStorage.getItem("theme") === "dark") {
+    body.classList.add("dark");
+} else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+    // Detect user's system preference for dark mode
+    body.classList.add("dark");
+}
+
+toggleButton.addEventListener("click", function () {
+    let isDarkMode = body.classList.contains("dark");
+
+    if (isDarkMode) {
+        body.classList.remove("dark");
+        localStorage.setItem("theme", "light");
+    } else {
+        body.classList.add("dark");
+        localStorage.setItem("theme", "dark");
+    }
+});
+
+
 
 //Timer
 // Timer display elements
@@ -84,7 +111,7 @@ function updateCountdown() {
     if (remainingTime <= 0) {
         clearInterval(timerInterval);
         timerText.textContent = '00:00';
-        timeUpPopup.style.display = 'block';
+        document.getElementById("time-up-popup").classList.remove('d-none');
     } else {
         timerText.textContent = formatTime(remainingTime);
     }
@@ -178,6 +205,9 @@ document.querySelectorAll('.materie-option').forEach(switchEl => {
 // Start timer or countdown automatically when quiz starts
 async function startQuiz() {
     console.log('Starting quiz...');
+   
+
+
     const selectedTimerType = document.querySelector('input[name="timer-type"]:checked').value;
     console.log(`Selected timer type: ${selectedTimerType}`);
 
@@ -222,19 +252,36 @@ async function startQuiz() {
     document.getElementById("start-screen").classList.add("d-none");
     document.getElementById("quiz-screen").classList.remove("d-none");
 
+    // Load first question
     loadQuestion();
 }
 
 
-// Load Question
 function loadQuestion() {
+    if (!selectedAnswers) {
+        selectedAnswers = []; // Ensure selectedAnswers is initialized
+    }
+    
+    if (!selectedAnswers[currentQuestionIndex]) {
+        selectedAnswers[currentQuestionIndex] = []; // Reset only current question's selection
+    }
+
     console.log(`Loading question ${currentQuestionIndex + 1} of ${questionPool.length}`);
-    selectedAnswers = [];
+
+    // Reset visibility of action buttons
+    const skipButton = document.getElementById("skip-button");
+    const submitButton = document.getElementById("submit-button");
+    const seeResultsButton = document.getElementById("see-results-button");
+
+    if (skipButton) skipButton.classList.remove("d-none");
+    if (submitButton) submitButton.classList.remove("d-none");
+    if (seeResultsButton) seeResultsButton.classList.add("d-none");
+
     let question = questionPool[currentQuestionIndex];
 
     console.log(`Question: ${question.question}`);
 
-    // Display question counter: 2 out of 13
+    // Display question counter
     document.getElementById("question-counter").innerText = `${currentQuestionIndex + 1} din ${questionPool.length}`;
 
     document.getElementById("question-text").innerText = question.question;
@@ -248,11 +295,26 @@ function loadQuestion() {
             button.innerText = answerText;
             button.dataset.choice = number;
             button.classList.add("answer-button", "btn", "btn-light", "w-100", "mt-2");
+
+            // Restore previous selection
+            if (selectedAnswers[currentQuestionIndex].includes(number)) {
+                button.classList.add("selected");
+            }
+
             button.onclick = () => toggleSelection(button);
             answersContainer.appendChild(button);
         }
     });
 
+    // Ensure "Submit Answer" button starts disabled
+    document.getElementById("submit-button").disabled = selectedAnswers[currentQuestionIndex].length === 0;
+
+    document.getElementById("next-button").classList.add('d-none');
+    document.getElementById("skip-button").onclick = skipQuestion;
+    document.getElementById("skip-button").disabled = questionPool.length === 1;
+
+
+    
     // Add debug buttons
     let debugContainer = document.createElement("div");
     debugContainer.classList.add("debug-buttons", "mt-3");
@@ -271,8 +333,6 @@ function loadQuestion() {
 
     answersContainer.appendChild(debugContainer);
 
-    document.getElementById("submit-button").disabled = true;
-    document.getElementById("next-button").classList.add('d-none');
 }
 
 function markCorrect(question) {
@@ -309,8 +369,38 @@ function nextQuestion() {
         showSummary();
     }
 
-    document.getElementById("next-button").classList.add('d-none');
-    document.getElementById("submit-button").classList.remove('d-none');
+     // Hide Next and Submit buttons after last question
+     if (currentQuestionIndex >= questionPool.length) {
+        document.getElementById("next-button").classList.add('d-none');
+        document.getElementById("submit-button").classList.add('d-none');
+        document.getElementById("skip-button").classList.add('d-none');
+        document.getElementById("see-results-button").classList.remove('d-none');
+    } else {
+        document.getElementById("next-button").classList.add('d-none');
+        document.getElementById("submit-button").classList.remove('d-none');
+        document.getElementById("skip-button").classList.remove('d-none');
+        document.getElementById("see-results-button").classList.add('d-none');
+    }
+}
+
+// Skip Question
+function skipQuestion() {
+    console.log(`Skipping question: ${currentQuestionIndex + 1}`);
+
+    if (questionPool.length > 1) {
+        // Move current question to the end
+        let skippedQuestion = questionPool.splice(currentQuestionIndex, 1)[0];
+        questionPool.push(skippedQuestion);
+
+        console.log("Question moved to end of queue.");
+
+        // Load next question
+        if (currentQuestionIndex >= questionPool.length) {
+            currentQuestionIndex = 0;
+        }
+
+        loadQuestion();
+    }
 }
 
 
@@ -319,24 +409,36 @@ function toggleSelection(button) {
     console.log(`Answer selected: ${button.innerText}`);
     let choice = button.dataset.choice;
 
-    if (selectedAnswers.includes(choice)) {
-        selectedAnswers = selectedAnswers.filter(ans => ans !== choice);
+    // Ensure selectedAnswers is structured as an array of arrays (one per question)
+    if (!selectedAnswers[currentQuestionIndex]) {
+        selectedAnswers[currentQuestionIndex] = [];
+    }
+
+    let selectedForCurrentQuestion = selectedAnswers[currentQuestionIndex];
+
+    // Toggle selection: Remove if already selected, otherwise add
+    if (selectedForCurrentQuestion.includes(choice)) {
+        selectedAnswers[currentQuestionIndex] = selectedForCurrentQuestion.filter(ans => ans !== choice);
         button.classList.remove("selected");
-    } else if (selectedAnswers.length < 2) {
-        selectedAnswers.push(choice);
+    } else if (selectedForCurrentQuestion.length < 2) { // Limit selection to 2
+        selectedForCurrentQuestion.push(choice);
         button.classList.add("selected");
     }
 
-    document.getElementById("submit-button").disabled = selectedAnswers.length === 0;
+    document.getElementById("submit-button").disabled = selectedForCurrentQuestion.length === 0;
 }
+
+
 
 // Check Answer Function
 function checkAnswer() {
     console.log('Checking answer...');
     let question = questionPool[currentQuestionIndex];
     let correctAnswers = question.correct.map(String);
-    let selectedSorted = selectedAnswers.sort();
     
+    // Ensure selectedAnswers[currentQuestionIndex] is an array
+    let selectedSorted = [...(selectedAnswers[currentQuestionIndex] || [])].sort();
+
     console.log(`Correct answers: ${correctAnswers}`);
     console.log(`User selected: ${selectedSorted}`);
 
@@ -344,15 +446,15 @@ function checkAnswer() {
     let isCorrect = JSON.stringify(selectedSorted) === JSON.stringify(correctAnswers);
 
     answerButtons.forEach(btn => {
-        btn.onclick = null;
-        btn.disabled = true;
+        btn.onclick = null; // Disable button clicks
+        btn.classList.add("disabled-answer"); // Style as disabled
         let choice = btn.dataset.choice;
 
         if (correctAnswers.includes(choice)) {
-            btn.classList.add("correct-border"); // Green border for correct anssswers
+            btn.classList.add("correct-border"); // Green border for correct answers
         }
-        if (selectedAnswers.includes(choice)) {
-            btn.classList.add("bold-text"); // Bold only selected answers
+        if (selectedAnswers[currentQuestionIndex]?.includes(choice)) {
+            btn.classList.add("selected"); // Bold only selected answers
             if (!correctAnswers.includes(choice)) {
                 btn.classList.add("incorrect"); // Red background for wrong selections
             }
@@ -363,7 +465,7 @@ function checkAnswer() {
     correctQuestions.push({
         question: question.question,
         options: question.answers,
-        selected: selectedAnswers.map(ans => question.answers[ans]),
+        selected: selectedAnswers[currentQuestionIndex]?.map(ans => question.answers[ans]) || [],
         correct: correctAnswers.map(ans => question.answers[ans])
     });
 
@@ -371,12 +473,11 @@ function checkAnswer() {
         wrongQuestions.push({
             question: question.question,
             options: question.answers,
-            selected: selectedAnswers.map(ans => question.answers[ans]),
+            selected: selectedAnswers[currentQuestionIndex]?.map(ans => question.answers[ans]) || [],
             correct: correctAnswers.map(ans => question.answers[ans])
         });
     } else {
         correctCount++;
-        
     }
 
     // Hide "Submit Answer" button and show either "Next Question" or "See Results" button
@@ -385,13 +486,14 @@ function checkAnswer() {
     if (currentQuestionIndex === questionPool.length - 1) {
         // Show "See Results" button on the last question
         document.getElementById("next-button").classList.add('d-none');
-        document.getElementById("check-results-button").classList.remove('d-none');
+        document.getElementById("see-results-button").classList.remove('d-none');
     } else {
         // Show "Next Question" button for all other questions
         document.getElementById("next-button").classList.remove('d-none');
-        document.getElementById("check-results-button").classList.add('d-none');
+        document.getElementById("see-results-button").classList.add('d-none');
     }
 }
+
 
 // Next Question Function
 function nextQuestion() {
@@ -406,6 +508,13 @@ function nextQuestion() {
     // Hide "Next Question" button and show "Submit Answer" button for next question
     document.getElementById("next-button").classList.add('d-none');
     document.getElementById("submit-button").classList.remove('d-none');
+
+    // Hide Skip button if only one question is left
+    if (currentQuestionIndex === questionPool.length - 1) {
+        document.getElementById("skip-button").classList.add('d-none');  // Hide Skip button
+    } else {
+        document.getElementById("skip-button").classList.remove('d-none');  // Show Skip button
+    }
 }
 
 // Show Quiz Summary
@@ -420,17 +529,17 @@ function showSummary() {
     // Display final score
     summaryContainer1.innerHTML = `<h3>Scor final: ${correctCount} / ${questionPool.length}</h3>`;
 
-   // Display timer or countdown results
-   const selectedTimerType = document.querySelector('input[name="timer-type"]:checked').value;
-   const summaryContainer = document.getElementById('summary-container');
+    // Display timer or countdown results
+    const selectedTimerType = document.querySelector('input[name="timer-type"]:checked').value;
+    const summaryContainer = document.getElementById('summary-container');
 
-   if (selectedTimerType === 'timer') {
-       const elapsedTime = Date.now() - startTime;
-       summaryContainer.innerHTML += `<p>Total time taken: ${formatTime(elapsedTime)}</p>`;
-   } else if (selectedTimerType === 'countdown') {
-       const remainingTime = countdownTime - (Date.now() - startTime);
-       summaryContainer.innerHTML += `<p>Time left: ${formatTime(remainingTime)}</p>`;
-   }
+    if (selectedTimerType === 'timer') {
+        const elapsedTime = Date.now() - startTime;
+        summaryContainer.innerHTML += `<p>Total time taken: ${formatTime(elapsedTime)}</p>`;
+    } else if (selectedTimerType === 'countdown') {
+        const remainingTime = countdownTime - (Date.now() - startTime);
+        summaryContainer.innerHTML += `<p>Time left: ${formatTime(remainingTime)}</p>`;
+    }
 
     // Show congrats message if all answers are correct
     if (correctCount === questionPool.length) {
@@ -441,38 +550,34 @@ function showSummary() {
     }
 
     // Display all questions
+    summaryContainer2.innerHTML = ""; // Clear previous summary
+
     questionPool.forEach((entry, index) => {
-        // Create a container for each question
-        summaryContainer2.innerHTML += `<div class="summary-item">
+        let selectedAnswersForQuestion = selectedAnswers[index] || []; // Ensure per-question tracking
+
+        let questionHTML = `<div class="summary-item">
             <p><strong>${index + 1}. ${entry.question}</strong></p>
             <ul>`;
 
-        // Display each option
         Object.keys(entry.answers).forEach(optionKey => {
             let optionText = entry.answers[optionKey];
-            let isCorrect = entry.correct.includes(optionKey); // Check if the option is correct
-            let isSelected = selectedAnswers.includes(optionKey); // Check if the option was selected
+            let isCorrect = entry.correct.includes(optionKey); // Check if correct
+            let isSelected = selectedAnswersForQuestion.includes(optionKey); // Check if selected
 
-            // Add classes for correct and incorrect answers
-            let liClass = "";
-            if (isCorrect) {
-                liClass += "correct-border"; // Highlight correct answers
-            }
-            if (isSelected && !isCorrect) {
-                liClass += " incorrect"; // Highlight incorrect selections
-            }
+            let liClass = "answer-button";
+            if (isCorrect) liClass += " correct-border";
+            if (isSelected && !isCorrect) liClass += " incorrect";
 
-            // Display the option text and mark if it was selected
-            summaryContainer2.innerHTML += `
-                <li class="${liClass}">
-                    ${optionText} ${isSelected ? '<strong>(✔️ Selectat)</strong>' : ''}
-                </li>`;
+            let displayOptionText = isSelected ? `<strong>${optionText}</strong>` : optionText;
+
+            questionHTML += `<li class="${liClass}">${displayOptionText}</li>`;
         });
 
-        // Close the question container
-        summaryContainer2.innerHTML += `</ul></div><hr>`;
+        questionHTML += `</ul></div><hr>`;
+        summaryContainer2.innerHTML += questionHTML;
     });
 }
+
 
 
 // Restart Quiz
@@ -482,17 +587,21 @@ function restartQuiz() {
     wrongQuestions = [];
     correctQuestions = [];
     document.getElementById("quiz-summary").classList.add('d-none');
+    document.getElementById("quiz-screen").classList.add('d-none');
     document.getElementById("start-screen").classList.remove('d-none');
+    document.getElementById("time-up-popup").classList.add('d-none');
+
+
+    selectedAnswers = [];
 
     clearInterval(timerInterval);
-    timeUpPopup.style.display = 'none';
-    timerText.textContent = '00:00:00';
-    timerDisplay.style.display = 'none';
+    timerText.textContent = '00:00';
+    
 }
 
 // Show Toast Notification
 window.onload = function() {
-    let toastElement = document.getElementById("toast-example");
+    let toastElement = document.getElementById("disclaimer");
     let toast = new bootstrap.Toast(toastElement, { autohide: false });
     toast.show();
 };

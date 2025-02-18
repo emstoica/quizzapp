@@ -13,10 +13,18 @@
 </head>
 <body>
 
+    <!-- Dark Mode Button -->
+    <div class="container d-flex justify-content-end mt-3">
+        <button id="dark-mode-toggle" class="dark-mode-toggle" aria-label="Toggle Dark Mode">
+            <img src="assets/darkmodeSVG.svg" alt="Dark Mode Icon" class="darkModeSVG">
+        </button>
+    </div>
+    
+
     <!-- Start Screen -->
     <section id="start-screen" class="container-fluid d-flex flex-column align-items-center mt-2 mb-5">
         <div class="row justify-content-center">
-            <div class="toast bg-warning text-black col-12 col-md-6" role="alert" aria-live="assertive" aria-atomic="true" id="toast-example">
+            <div class="toast bg-warning text-black col-12 col-md-6" role="alert" aria-live="assertive" aria-atomic="true" id="disclaimer">
                 <div class="d-flex">
                     <div class="toast-body">
                         Dacă găsiți erori în întrebările sau răspunsurile grilelor, vă rugăm să ne anunțați la <b>contact@grilebarou.ro</b>
@@ -28,55 +36,60 @@
 
         <div class="row text-center">
             <img src="assets/law2.png" alt="Law-related illustration" class="img-fluid lawimage mt-3 mx-auto d-block">
-            <h1>Grile admitere Barou</h1>
+            <h1 class="titlestartscreen">Grile admitere Barou</h1>
             <p class="mt-3">Testează-ți cunoștințele. Selectează numărul de grile, timpul și începe testul.</p>
-            <p class="mt-1">Grilele sunt preluate din subiectele examenului de primire în profesia de avocat (pentru dobândirea titlului profesional de avocat <b>stagiar</b>) din anii precedenți.</p>
+            <p class="mt-1">Grilele sunt preluate din subiectele examenului de primire în profesia de avocat (pentru dobândirea titlului profesional de avocat <b class="accent">stagiar</b>) din anii precedenți.</p>
         </div>
 
         <!-- Timer/Countdown Controls -->
-        <div id="timer-controls" class="container d-flex flex-column justify-content-center align-items-center">
-            <div class="row justify-content-center">
-                <!-- None Option -->
-                <div class="form-check col-12 col-md-4 mb-3">
-                    <input class="form-check-input" type="radio" name="timer-type" id="timer-none" value="none" checked>
-                    <label class="form-check-label" for="timer-none">None</label>
-                </div>
-
-                <!-- Timer Option -->
-                <div class="form-check col-12 col-md-4 mb-3">
-                    <input class="form-check-input" type="radio" name="timer-type" id="timer-timer" value="timer">
-                    <label class="form-check-label" for="timer-timer">Enable Timer</label>
-                </div>
-
-                <!-- Countdown Option -->
-                <div class="form-check col-12 col-md-4 mb-3">
-                    <input class="form-check-input" type="radio" name="timer-type" id="timer-countdown" value="countdown">
-                    <label class="form-check-label" for="timer-countdown">Enable Countdown</label>
-                </div>
+        <div id="timer-controls" class="d-inline d-flex flex-column justify-content-center align-items-center mt-3">
+            <label for="question-count" class="grileselecttext mb-2">Selectează tipul de monitorizare a timpului:</label>
+          
+            <!-- None Option -->
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="timer-type" id="timer-none" value="none" checked>
+                <label class="form-check-label" for="timer-none">Fără</label>
             </div>
 
+            <!-- Timer Option -->
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="timer-type" id="timer-timer" value="timer">
+                <label class="form-check-label" for="timer-timer">Cronometru</label>
+            </div>
+
+            <!-- Countdown Option -->
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="timer-type" id="timer-countdown" value="countdown">
+                <label class="form-check-label" for="timer-countdown">Temporizator</label>
+            </div>
+         
+
             <!-- Countdown Settings -->
-            <div id="countdown-settings" class="d-flex justify-content-center align-items-center mt-3">
-                <div class="col-lg-2 col-md-3 col-sm-4 col-6">
-                    <label for="countdown-minutes" class="form-label">Set Countdown (minutes):</label>
-                    <input type="number" id="countdown-minutes" class="form-control" min="1" value="1">
+            <div id="countdown-settings" class="d-flex justify-content-center align-items-center">
+                <div class="countdown-settings container-fluid d-flex flex-column align-items-center">
+                    <label for="countdown-minutes" class="form-label mb-2">Setează timpul (minute):</label>
+                    <div class="col-lg-2 col-md-3 col-sm-4 col-6 d-flex justify-content-center align-items-center">
+                        <input type="number" id="countdown-minutes" class="form-control input-no-spinner" min="1" value="10">
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="d-flex flex-column justify-content-center align-items-start mt-3">
-            <label for="question-count" class="grileselecttext">Selectează numărul de grile:</label>
-            <div class="col-lg-2 col-md-3 col-sm-4 col-6">
-                <input type="number" id="question-count" class="form-control" min="1" max="100" value="10">
+        <div class="grileselect d-inline d-flex flex-column align-items-center mt-3">
+            <div class="container-fluid d-flex flex-column align-items-center">
+                <label for="question-count" class="grileselecttext mb-2">Selectează numărul de grile:</label>
+                <div class="col-lg-2 col-md-3 col-sm-4 col-6 d-flex justify-content-center align-items-center">
+                    <input type="number" id="question-count" class="form-control input-no-spinner" min="1" max="100" value="10">
+                </div>
             </div>
         </div>
     
         <!-- Filter Section -->
-        <div id="materie-filter" class="container-fluid mt-3 mb-4">
+        <div id="materie-filter" class="d-inline justify-content-center mt-3">
             <div class="row justify-content-center align-items-center">
                 <div class="col-auto">
                     <div class="container-fluid d-flex flex-column align-items-start">
-                        <label class="filtrutitlu">Filtrează după Materie:</label><br>
+                        <label class="filtrutitlu mb-2">Filtrează după Materie:</label><br>
                         <!-- "Toate" Switch -->
                         <div class="form-check form-switch">
                             <input class="form-check-input materie-option" type="checkbox" id="all" value="all" checked>
@@ -110,7 +123,7 @@
                     </div>
                 </div>
             </div>
-            <button class="btn btn-primary mt-3 mb-5" onclick="startQuiz()" aria-label="Start the quiz">Începe testul</button>
+            <button class="btn btn-primary mt-5" onclick="startQuiz()" aria-label="Start the quiz">Începe testul</button>
         </div>        
     </section>
 
@@ -123,12 +136,12 @@
                 <span id="timer-text" class="badge timer">00:00</span>
                 <button id="toggle-timer" onclick="toggleTimer()" class="btn btn-link">
                     <!-- Show SVG initially -->
-                    <span id="showSVG">
-                    <img src="assets/show-timer.svg" alt="Timer Icon" class="showSVG">
-                    </span>
-                    <!-- Hide SVG, initially hidden -->
                     <span id="hideSVG" class="d-none">
                         <img src="assets/hide-timer.svg" alt="Timer Icon" class="hideSVG">
+                    </span>
+                    <!-- Hide SVG, initially hidden -->
+                    <span id="showSVG">
+                        <img src="assets/show-timer.svg" alt="Timer Icon" class="showSVG">
                     </span>
                 </button>
             </div>
@@ -136,10 +149,12 @@
         
         <h2 id="question-text" class="mb-4 mt-4"></h2>
         <div id="answers-container" class="mb-4"></div>
-        <div id="button-container" class="d-flex justify-content-center mt-3">
-            <button id="submit-button" class="btn btn-success" onclick="checkAnswer()" disabled>Verifică răspuns</button>
-            <button id="next-button" class="btn btn-secondary mt-3 d-none" onclick="nextQuestion()">Următoarea întrebare</button>
-            <button id="check-results-button" class="btn btn-primary mt-3 d-none" onclick="showSummary()">Vezi Rezultatele</button>
+        <div id="button-container" class="d-flex flex-column justify-content-center align-items-center mt-3">
+            <button id="submit-button" class="btn btn-success mt-3 col-lg-2" onclick="checkAnswer()" disabled>Verifică răspuns</button>
+            <button id="next-button" class="btn btn-secondary mt-3 col-lg-2" onclick="nextQuestion()">Următoarea întrebare</button>
+            <button id="see-results-button" class="btn btn-primary mt-3 col-lg-2 d-none" onclick="showSummary()">Vezi Rezultatele</button>
+            <button id="skip-button" class="btn btn-warning mt-3 col-lg-2" onclick="skipQuestion()">Skip for Later</button>
+            
         </div>
 
        <!-- Timer Display -->
@@ -163,7 +178,7 @@
         <div id="time-up-popup" class="d-none">
             <p>Time's up!</p>
             <button id="continue-quiz" onclick="continueQuiz()">Continue Quiz</button>
-            <button id="restart-quiz" onclick="restartQuiz()">Restart Quiz</button>
+            <button class="btn btn-primary mt-3" onclick="restartQuiz()">Reîncepe Testul</button> 
         </div>
     </section>
 
