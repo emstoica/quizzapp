@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grile Barou</title>
+    <title>Grile Admitere Barou</title>
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -12,112 +12,189 @@
     <link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
+
+    <!-- Dark Mode Button -->
+    <div class="container d-flex justify-content-end mt-3">
+        <button id="dark-mode-toggle" class="dark-mode-toggle" aria-label="Toggle Dark Mode">
+            <img src="assets/darkmodeSVG.svg" alt="Dark Mode Icon" class="darkModeSVG">
+        </button>
+    </div>
     
-<div class="container text-center justify-content-center"> 
-        <!-- Start Screen -->
-    <div id="start-screen" class="container text-center mt-5">
-        <div class="toast align-items-center text-bg-primary border-0 position-relative top-10 start-50 translate-middle w-75" 
-            role="alert" aria-live="assertive" aria-atomic="true" id="toast-example">
-            <div class="d-flex">
-                <div class="toast-body">
-                    În caz că găsiți erori în întrebările sau răspunsurile grilelor, vă rugăm să ne anunțați la <b>contact@grilebarou.ro</b>
+
+    <!-- Start Screen -->
+    <section id="start-screen" class="container-fluid d-flex flex-column align-items-center mt-2 mb-5">
+        <div class="row justify-content-center">
+            <div class="toast bg-warning text-black col-12 col-md-6" role="alert" aria-live="assertive" aria-atomic="true" id="disclaimer">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        Dacă găsiți erori în întrebările sau răspunsurile grilelor, vă rugăm să ne anunțați la <b>contact@grilebarou.ro</b>
+                    </div>
+                    <button type="button" class="btn-close btn-close-black me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
                 <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
             </div>
         </div>
-        <h1>Grile Barou</h1>
-        <p class="mt-3">Testează-ți cunoștințele. Selectează numărul de întrebări și apasă pentru a începe.</p>
-       
-        <div class="row justify-content-center mt-3">
-            <div class="col-lg-2 col-md-3 col-sm-4 col-6 d-flex justify-content-center">
-                <input type="number" id="question-count" class="form-control" min="1" max="100" value="10">
+
+        <div class="row text-center start-screen-details">
+            <img src="assets/law2.png" alt="Law-related illustration" class="img-fluid lawimage mt-3 mx-auto d-block">
+            <h1 class="titlestartscreen">Grile admitere Barou</h1>
+            <p class="mt-3">Testează-ți cunoștințele. Selectează numărul de grile, timpul și începe testul.</p>
+            <p class="mt-1">Grilele sunt preluate din subiectele examenului de primire în profesia de avocat (pentru dobândirea titlului profesional de avocat <b class="accent">stagiar</b>) din anii precedenți.</p>
+        </div>
+        <div class="start-screen-options d-flex flex-column align-items-center">
+            <!-- Timer/Countdown Controls -->
+            <div id="timer-controls" class="d-inline d-flex flex-column justify-content-center align-items-center mt-3">
+                <label for="question-count" class="grileselecttext mb-2">Selectează tipul de monitorizare a timpului:</label>
+                <div>
+                    <!-- None Option -->
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="timer-type" id="timer-none" value="none" checked>
+                        <label class="form-check-label" for="timer-none">Fără</label>
+                    </div>
+
+                    <!-- Timer Option -->
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="timer-type" id="timer-timer" value="timer">
+                        <label class="form-check-label" for="timer-timer">Cronometru</label>
+                    </div>
+
+                    <!-- Countdown Option -->
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="timer-type" id="timer-countdown" value="countdown">
+                        <label class="form-check-label" for="timer-countdown">Temporizator</label>
+                    </div>
+                
+
+                    <!-- Countdown Settings -->
+                    <div id="countdown-settings" class="d-flex justify-content-center align-items-center">
+                        <div class="countdown-settings container-fluid d-flex flex-column align-items-center">
+                            <label for="countdown-minutes" class="form-label mb-2">Setează timpul (minute):</label>
+                            <div class="col-lg-2 col-md-3 col-sm-4 col-6 d-flex justify-content-center align-items-center">
+                                <input type="number" id="countdown-minutes" class="form-control input-no-spinner" min="1" value="10" max="280">
+                            </div>
+                        </div>
+                    </div>
+                </div>  
+   
+            </div>
+
+            <div class="grileselect d-inline d-flex flex-column align-items-center mt-3">
+                <div class="container-fluid d-flex flex-column align-items-center">
+                    <label for="question-count" class="grileselecttext mb-2">Selectează numărul de grile:</label>
+                    <div class="col-lg-2 col-md-3 col-sm-4 col-6 d-flex justify-content-center align-items-center">
+                        <input type="number" id="question-count" class="form-control input-no-spinner" min="2" max="100" value="10">
+                    </div>
+                </div>
+            </div>
+        
+            <!-- Filter Section -->
+            <div id="materie-filter" class="d-inline justify-content-center mt-3">
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-auto">
+                        <div class="container-fluid d-flex flex-column align-items-start">
+                            <label class="filtrutitlu mb-2">Filtrează după Materie:</label><br>
+                            <!-- "Toate" Switch -->
+                            <div class="form-check form-switch">
+                                <input class="form-check-input materie-option" type="checkbox" id="all" value="all" checked>
+                                <label class="form-check-label" for="all">Toate</label>
+                            </div>
+                            <!-- Materie1 Switch -->
+                            <div class="form-check form-switch">
+                                <input class="form-check-input materie-option" type="checkbox" id="Materie1" value="OEPA">
+                                <label class="form-check-label" for="Materie1">OEPA</label>
+                            </div>
+                            <!-- Materie2 Switch -->
+                            <div class="form-check form-switch">
+                                <input class="form-check-input materie-option" type="checkbox" id="Materie2" value="Drept civil">
+                                <label class="form-check-label" for="Materie2">Drept civil</label>
+                            </div>
+                            <!-- Materie3 Switch -->
+                            <div class="form-check form-switch">
+                                <input class="form-check-input materie-option" type="checkbox" id="Materie3" value="Drept procesual civil">
+                                <label class="form-check-label" for="Materie3">Drept procesual civil</label>
+                            </div>
+                            <!-- Materie4 Switch -->
+                            <div class="form-check form-switch">
+                                <input class="form-check-input materie-option" type="checkbox" id="Materie4" value="Drept penal">
+                                <label class="form-check-label" for="Materie4">Drept penal</label>
+                            </div>
+                            <!-- Materie5 Switch -->
+                            <div class="form-check form-switch">
+                                <input class="form-check-input materie-option" type="checkbox" id="Materie5" value="Drept procesual penal">
+                                <label class="form-check-label" for="Materie5">Drept procesual penal</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+            <button class="btn start-button mt-5" onclick="startQuiz()" aria-label="Start the quiz">Începe testul</button>
+        </div>      
+    </section>
+
+    <!-- Quiz Screen -->
+    <section id="quiz-screen" class="container text-center mt-5 d-none">
+        <div class="d-flex flex-row flex-wrap justify-content-between align-items-center">
+            <p id="question-counter" class="badge question-counter"></p>
+         <!-- Timer Display -->
+            <div id="timer-display" class="d-none">
+                <span id="timer-text" class="badge timer">00:00</span>
+                <button id="toggle-timer" onclick="toggleTimer()" class="btn btn-link">
+                    <!-- Show SVG initially -->
+                    <span id="hideSVG">
+                        <img src="assets/hide-timer.svg" alt="Timer Icon" class="hideSVG">
+                    </span>
+                    <!-- Hide SVG, initially hidden -->
+                    <span id="showSVG" class="d-none">
+                        <img src="assets/show-timer.svg" alt="Timer Icon" class="showSVG">
+                    </span>
+                </button>
             </div>
         </div>
-        <!-- Filter Section -->
-        <div id="materie-filter" class="container-fluid mt-3 mb-4">
-            <div class="row justify-content-center align-items-center">
-                <div class="col-12 col-md-4"> <!-- Center the content on large and small screens -->
-                    <div class="container-fluid d-flex flex-column align-items-start">
-                        <label class="filtrutitlu">Filtrează după Materie:</label><br>
-                        <!-- "Toate" Switch -->
-                        <div class="form-check form-switch">
-                            <input class="form-check-input materie-option" type="checkbox" id="all" value="all" checked>
-                            <label class="form-check-label" for="all">Toate</label>
-                        </div>
-                        <!-- Materie1 Switch -->
-                        <div class="form-check form-switch">
-                            <input class="form-check-input materie-option" type="checkbox" id="Materie1" value="OEPA">
-                            <label class="form-check-label" for="Materie1">OEPA</label>
-                        </div>
-                        <!-- Materie2 Switch -->
-                        <div class="form-check form-switch">
-                            <input class="form-check-input materie-option" type="checkbox" id="Materie2" value="Drept civil">
-                            <label class="form-check-label" for="Materie2">Drept civil</label>
-                        </div>
-                        <!-- Materie3 Switch -->
-                        <div class="form-check form-switch">
-                            <input class="form-check-input materie-option" type="checkbox" id="Materie3" value="Drept procesual civil">
-                            <label class="form-check-label" for="Materie3">Drept procesual civil</label>
-                        </div>
-                        <!-- Materie4 Switch -->
-                        <div class="form-check form-switch">
-                            <input class="form-check-input materie-option" type="checkbox" id="Materie4" value="Drept penal">
-                            <label class="form-check-label" for="Materie4">Drept penal</label>
-                        </div>
-                        <!-- Materie5 Switch -->
-                        <div class="form-check form-switch">
-                            <input class="form-check-input materie-option" type="checkbox" id="Materie5" value="Drept procesual penal">
-                            <label class="form-check-label" for="Materie5">Drept procesual penal</label>
-                        </div>
+        
+        <h2 id="question-text" class="mb-4 mt-4"></h2>
+        <div id="answers-container" class="mb-4"></div>
+        <div id="button-container" class="d-flex flex-column justify-content-center align-items-center mt-3">
+            <button id="submit-button" class="btn btn-success col-lg-2" onclick="checkAnswer()" disabled>Verifică răspuns</button>
+            <button id="next-button" class="btn btn-secondary col-lg-2" onclick="nextQuestion()">Următoarea întrebare</button>
+            <button id="see-results-button" class="btn btn-primary col-lg-2 d-none" onclick="showSummary()">Vezi Rezultatele</button>
+            <button id="skip-button" class="btn btn-warning mt-3 col-lg-2" onclick="skipQuestion()">Răspunde mai târziu</button>
+            
+        </div>
+
+       
+        <!-- Time's Up Popup -->
+        <div id="time-up-popup" class="d-none">
+            <p>Timpul a expirat! Ne pare rău :(</p>
+            <button id="continue-quiz" class="btn btn-primary mt-3" onclick="continueQuiz()">Continuă</button>
+            <button class="btn btn-primary mt-3 restart-button" onclick="restartQuiz()">Reîncepe testul</button> 
+        </div>
+    </section>
+
+    <!-- Summary Screen -->
+    <section id="quiz-summary" class="container text-center d-none">
+        <h3 class="result-title mt-2">Rezultatul tău</h3>
+        <p id="summary-text" class="fs-5 fw-bold"></p>
+        <div id="summary-container"></div>
+        <!-- Grile Dropdown -->
+        <div class="accordion mt-4">
+            <div class="accordion-item">
+                <h2 class="d-flex accordion-header justify-content-center">
+                    <button id="grileaccordion" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                        Grile
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <div id="summary-container2"></div>
                     </div>
                 </div>
             </div>
         </div>
-        
+        <button class="btn btn-primary mt-3 restart-button" onclick="restartQuiz()">Reîncepe testul</button>
+    </section>
 
-        
-   
-        <button class="btn btn-primary mt-3" onclick="startQuiz()">Începe testul</button>
-        <div class="row m-3 justify-content-center">
-            <!-- Correct Image Syntax -->
-            <img src="assets/law2.png" alt="law" class="img-fluid lawimage">
-        </div>
-        <div class="container-fluid disclaimer mb-5 position-relative bottom-50 start-50 translate-middle">
-            <p class="mt-3">Grilele sunt preluate din subiectele examenului de primire în profesia de avocat (pentru dobândirea titlului profesional de avocat <b>stagiar</b>) din anii precedenți.</p>
-        </div>
-    </div>
-
-
-
-    <!-- Quiz Screen -->
-    <div id="quiz-screen" class="container text-center mt-5" style="display: none;">
-        <p id="question-counter" class="fs-4 mb-4"></p>
-
-        <h2 id="question-text" class="mb-4"></h2>
-        <div id="answers-container" class="mb-4"></div>
-        <div id="button-container" class="d-flex justify-content-center mt-3">
-            <button id="submit-button" class="btn btn-success" onclick="checkAnswer()" disabled>Verifică răspuns</button>
-            <button id="next-button" class="btn btn-secondary mt-3" onclick="nextQuestion()" style="display: none;">Următoarea întrebare</button>
-            <button id="check-results-button" class="btn btn-primary mt-3" onclick="showSummary()" style="display: none;">Vezi Rezultatele</button>
-        </div>  
-    
-      
-    </div>
-
-    
-    <!-- Summary Screen -->
-    <div id="quiz-summary" class="container text-center mt-5" style="display: none;">
-        <h3 class="result-title">Rezultatul tău</h3>
-        <p id="summary-text" class="fs-5 fw-bold"></p>
-        <div id="summary-container"></div>
-        <button class="btn btn-primary mt-3" onclick="restartQuiz()">Reîncepe Testul</button>
-    </div>
-
-</div>
-
-<!-- Bootstrap 5 JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-<script src="script.js"></script>
-
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="js/script.js"></script>
 </body>
 </html>
