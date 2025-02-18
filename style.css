@@ -114,7 +114,6 @@ body.dark .hideSVG, body.dark .showSVG {
 
 #timer-display {
     font-weight: bold;
-    margin: 20px;
 }
 
 #time-up-popup {
@@ -202,6 +201,10 @@ hr{
 }
 
 /* Quiz screen */
+#quiz-screen{
+    padding-left: 1em;
+    padding-right: 1em;
+}
 button.disabled-answer {
     pointer-events: none; /* Disable interaction (no click) */
     opacity: 1; /* Keep the original opacity (not greyed out) */
@@ -215,6 +218,10 @@ button.disabled-answer {
 
 #submit-button, #skip-button, #next-button, #see-results-button, #continue-quiz, .restart-button{
     font-weight: 500;
+}
+
+#question-counter{
+    margin-bottom: 0px;
 }
 .selected {
     background-color: rgb(255, 255, 229);
