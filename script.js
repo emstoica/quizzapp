@@ -609,7 +609,8 @@ function restartQuiz() {
 
 // Show Toast Notification
 window.onload = function() {
-    let toastElement = document.getElementById("disclaimer");
+    let toastElement = document.querySelector(".toast"); // Use querySelector to select the toast element
     let toast = new bootstrap.Toast(toastElement, { autohide: false });
     toast.show();
 };
+

@@ -178,9 +178,9 @@ hr{
 .toast{
     width: 90%;
 }
-#disclaimer{
+/* #toastmessage{
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
-}
+
 .titlestartscreen{
     color: var(--color-accent);
     text-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
